@@ -7,7 +7,8 @@ import { cook, syncCookingUI, cookingTick } from './cooking.js';
 import { autoTick } from './autocook.js';
 import { applyFancyTier, leafTick } from './fancy.js';
 import { buildUpgrades, refreshUpgrades, restorePurchasesFromState } from './upgrades.js';
-import { restoreBasketIfOwned } from './basket.js';
+import { restoreBasketIfOwned, basketLoopTick } from './basket.js';
+import { restoreKettleIfOwned } from './kettle.js';
 import { checkAchievements } from './achievements.js';
 import { togglePanel, closeAllPanels } from './panels.js';
 import { wireKeyboard } from './keyboard.js';
@@ -70,6 +71,7 @@ function frame(t) {
   state.playTimeSeconds += dt;
 
   cookingTick(dt);  // cps fills the active-dish progress bar
+  basketLoopTick(dt); // periodic basket open animation
   autoTick(dt);
   leafTick(dt);
   applyFancyTier();
@@ -96,6 +98,7 @@ function init() {
   buildUpgrades();
   restorePurchasesFromState();
   restoreBasketIfOwned(state);
+  restoreKettleIfOwned(state);
   refreshUpgrades();
   updateStats();
   syncCookingUI();

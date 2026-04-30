@@ -5,11 +5,13 @@ import { state, save } from './state.js';
 import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config.js';
 import { fmt, spritePath } from './util.js';
 import { animateBasketOpen } from './basket.js';
+import { animateKettleAppear } from './kettle.js';
 
 // ---------- Special-case purchase callbacks ----------
-// Keeps `config.js` as pure data — the basket animation lives in basket.js.
+// Keeps `config.js` as pure data — visual reactions live in their modules.
 const ON_BUY = {
   basket: animateBasketOpen,
+  kettle: animateKettleAppear,
 };
 
 // ---------- Cost scaling ----------

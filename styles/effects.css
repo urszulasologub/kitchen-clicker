@@ -258,14 +258,6 @@
   letter-spacing: 1px;
   margin-top: 2px;
 }
-.progress-auto {
-  font-size: 0.75rem;
-  color: rgba(180, 220, 255, 0.85);
-  letter-spacing: 1px;
-  margin-top: 2px;
-  font-style: italic;
-  min-height: 0.95rem;
-}
 
 /* ---------- Particles (leaves drifting at high tiers) ---------- */
 #particle-layer {

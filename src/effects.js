@@ -92,9 +92,8 @@ const $progressName   = document.getElementById('progress-name');
 const $progressFill   = document.getElementById('progress-fill');
 const $progressClicks = document.getElementById('progress-clicks');
 const $progressValue  = document.getElementById('progress-value');
-const $progressAuto   = document.getElementById('progress-auto');
 
-export function refreshProgressUI(dish, cost, progress, payout, cpsRate) {
+export function refreshProgressUI(dish, cost, progress, payout) {
   if (!$progress) return;
   $progress.classList.remove('hidden');
   $progressIcon.src = spritePath(`Dish/${dish.name}.png`);
@@ -103,9 +102,6 @@ export function refreshProgressUI(dish, cost, progress, payout, cpsRate) {
   $progressFill.style.width = pct + '%';
   $progressClicks.textContent = `${Math.floor(Math.min(progress, cost))} / ${cost}`;
   if (payout != null) $progressValue.textContent = `Worth $${fmt(payout)}`;
-  if ($progressAuto) {
-    $progressAuto.textContent = cpsRate > 0 ? `auto +${fmt(cpsRate)} / sec` : '';
-  }
 }
 
 export function hideProgressUI() {
