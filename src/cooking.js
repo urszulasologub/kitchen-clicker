@@ -63,7 +63,7 @@ export function syncCookingUI() {
     hideProgressUI();
     return;
   }
-  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress, dish.value * state.clickPower);
+  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress, dish.value * state.clickPower, state.cps);
 }
 
 // ---------- Pot click ----------
@@ -94,7 +94,7 @@ export function cook() {
   if (state.cookingProgress >= cost) {
     completeDish(dish);
   } else {
-    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower, state.cps);
   }
 }
 
@@ -102,6 +102,7 @@ export function cook() {
 // Called every frame from main.js. cps adds to the current dish's progress
 // bar continuously; if no dish is active, one is auto-picked so passive
 // income keeps flowing even when the player isn't clicking.
+let _logAccum = 0;
 export function cookingTick(dt) {
   if (state.cps <= 0) return;
 
@@ -122,10 +123,22 @@ export function cookingTick(dt) {
   state.cookingProgress += state.cps * dt;
   const cost = clickCostOf(dish);
 
+  // Debug heartbeat — prints once a second so you can confirm cps is firing.
+  _logAccum += dt;
+  if (_logAccum > 1) {
+    _logAccum = 0;
+    console.log('[cookingTick]', {
+      cps: state.cps,
+      dish: state.currentDish,
+      progress: state.cookingProgress.toFixed(2),
+      cost,
+    });
+  }
+
   if (state.cookingProgress >= cost) {
     completeDish(dish);
   } else {
-    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower, state.cps);
   }
 }
 

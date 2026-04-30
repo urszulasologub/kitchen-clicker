@@ -86,14 +86,15 @@ export function flashScreen(kind) {
 }
 
 // ---------- Cooking progress widget ----------
-const $progress      = document.getElementById('cook-progress');
-const $progressIcon  = document.getElementById('progress-icon');
-const $progressName  = document.getElementById('progress-name');
-const $progressFill  = document.getElementById('progress-fill');
+const $progress       = document.getElementById('cook-progress');
+const $progressIcon   = document.getElementById('progress-icon');
+const $progressName   = document.getElementById('progress-name');
+const $progressFill   = document.getElementById('progress-fill');
 const $progressClicks = document.getElementById('progress-clicks');
 const $progressValue  = document.getElementById('progress-value');
+const $progressAuto   = document.getElementById('progress-auto');
 
-export function refreshProgressUI(dish, cost, progress, payout) {
+export function refreshProgressUI(dish, cost, progress, payout, cpsRate) {
   if (!$progress) return;
   $progress.classList.remove('hidden');
   $progressIcon.src = spritePath(`Dish/${dish.name}.png`);
@@ -102,6 +103,9 @@ export function refreshProgressUI(dish, cost, progress, payout) {
   $progressFill.style.width = pct + '%';
   $progressClicks.textContent = `${Math.floor(Math.min(progress, cost))} / ${cost}`;
   if (payout != null) $progressValue.textContent = `Worth $${fmt(payout)}`;
+  if ($progressAuto) {
+    $progressAuto.textContent = cpsRate > 0 ? `auto +${fmt(cpsRate)} / sec` : '';
+  }
 }
 
 export function hideProgressUI() {
