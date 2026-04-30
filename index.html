@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Little Chef Clicker</title>
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/scene.css" />
+  <link rel="stylesheet" href="styles/cook.css" />
+  <link rel="stylesheet" href="styles/cookbook.css" />
+  <link rel="stylesheet" href="styles/purchases.css" />
+  <link rel="stylesheet" href="styles/effects.css" />
+  <link rel="stylesheet" href="styles/fancy.css" />
+  <link rel="stylesheet" href="styles/panels.css" />
+  <link rel="stylesheet" href="styles/toast.css" />
+</head>
+<body>
+  <div id="scene">
+    <img id="bg-wall" src="Sprites/Sprites/Background/wall.png" alt="" />
+    <img id="bg-counter" src="Sprites/Sprites/Background/counter.png" alt="" />
+
+    <!-- Day/night cycle: tinted overlay sweeping across real-world hours -->
+    <div id="day-night-overlay"></div>
+
+    <!-- Each purchased item shows up here on shelf or counter -->
+    <div id="purchases"></div>
+
+    <!-- Chalkboard top-left: stats + reset -->
+    <div id="chalkboard">
+      <div class="chalk-row"><span id="coins-label">$0</span></div>
+      <div class="chalk-row small"><span id="cps-label">0 / sec</span></div>
+      <div class="chalk-row small"><span id="click-label">+1 / click</span></div>
+      <button id="reset-btn" type="button">RESET</button>
+    </div>
+
+    <!-- Counter scene with pot, splash, dish, glow -->
+    <div id="cook-area">
+      <img class="glow" id="glow" src="Sprites/Sprites/Animations/Glow/Glow_Center.png" alt="" />
+      <img class="splash" id="splash" src="" alt="" />
+      <div id="dish-layer"></div>
+      <div class="pot-wrap" id="pot">
+        <img class="pot-base" src="Sprites/Sprites/Environment/Pot/pot_base.png" alt="" />
+        <img class="pot-lid" id="pot-lid" src="Sprites/Sprites/Environment/Pot/pot_lid.png" alt="" />
+      </div>
+      <div id="ghost-layer"></div>
+      <div id="float-layer"></div>
+    </div>
+
+    <!-- Particle layer (leaves at high tiers) -->
+    <div id="particle-layer"></div>
+
+    <!-- FRENZY tier-promotion banner -->
+    <div id="frenzy"></div>
+
+    <!-- Now-cooking progress widget (shown while a dish is in progress) -->
+    <div id="cook-progress" class="hidden">
+      <img class="progress-icon" id="progress-icon" alt="" />
+      <div class="progress-info">
+        <div class="progress-name" id="progress-name"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-clicks" id="progress-clicks"></div>
+      </div>
+    </div>
+
+    <!-- Screen flash on dish completion -->
+    <div id="screen-flash" class="screen-flash"></div>
+
+    <!-- Fixed counter decor -->
+    <img class="counter-decor stove"  src="Sprites/Sprites/Environment/Counter/stove.png" alt="" />
+    <img class="counter-decor coffee" src="Sprites/Sprites/Environment/Counter/coffemaker.png" alt="" />
+    <img class="counter-decor cactus" src="Sprites/Sprites/Environment/Counter/cactus_plant.png" alt="" />
+
+    <!-- Bread basket: hidden until Bread Basket upgrade is bought -->
+    <div class="basket-decor hidden" id="basket-decor">
+      <img class="basket-base"  src="Sprites/Sprites/Animations/Basket/basket_base.png" alt="" />
+      <img class="basket-cover" id="basket-cover" src="Sprites/Sprites/Animations/Basket/basket_1.png" alt="" />
+    </div>
+
+    <!-- Recently cooked menu -->
+    <div id="recent-menu">
+      <div class="recent-title">RECENT</div>
+      <div id="recent-list"></div>
+    </div>
+
+    <!-- Cookbook on the right: upgrade cards -->
+    <div id="book">
+      <img class="book-bg" src="Sprites/Sprites/Book/Book_Back.png" alt="" />
+      <img class="book-bg book-mid"   src="Sprites/Sprites/Book/Book_Mid.png" alt="" />
+      <img class="book-bg book-pages" src="Sprites/Sprites/Book/Book_Pages.png" alt="" />
+      <div class="book-content">
+        <div class="book-title">COOKBOOK</div>
+        <div id="upgrades"></div>
+      </div>
+    </div>
+
+    <!-- Bottom-left UI buttons: open panels -->
+    <div id="ui-buttons">
+      <button id="btn-recipes"      type="button" title="Recipe Book (R)">RECIPES</button>
+      <button id="btn-achievements" type="button" title="Achievements (A)">AWARDS</button>
+      <button id="btn-stats"        type="button" title="Stats (T)">STATS</button>
+    </div>
+
+    <!-- Toast notifications stack -->
+    <div id="toast-stack"></div>
+
+    <!-- Modal panels -->
+    <div id="panel-backdrop"></div>
+
+    <div id="panel-recipes" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Recipe Book</span>
+        <button class="panel-close" type="button">✕</button>
+      </div>
+      <div id="recipes-list" class="panel-content"></div>
+    </div>
+
+    <div id="panel-achievements" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Achievements</span>
+        <button class="panel-close" type="button">✕</button>
+      </div>
+      <div id="achievements-list" class="panel-content"></div>
+    </div>
+
+    <div id="panel-stats" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Stats</span>
+        <button class="panel-close" type="button">✕</button>
+      </div>
+      <div id="stats-list" class="panel-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

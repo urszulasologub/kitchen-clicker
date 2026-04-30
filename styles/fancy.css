@@ -1,0 +1,112 @@
+/* Fancy tier escalation — visual chaos that scales with cps */
+
+/* ---------- shared keyframes ---------- */
+@keyframes spinSlow {
+  from { transform: translate(-50%,-50%) rotate(0); }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes idleWobble {
+  0%, 100% { transform: rotate(0deg)  translateY(0); }
+  25%      { transform: rotate(2deg)  translateY(-2px); }
+  75%      { transform: rotate(-2deg) translateY(-2px); }
+}
+@keyframes vibratePot {
+  0%,100% { transform: translate(0,0) rotate(0); }
+  20%     { transform: translate(-3px, 1px) rotate(-1.5deg); }
+  40%     { transform: translate(3px, -1px) rotate(1.5deg); }
+  60%     { transform: translate(-2px, 2px) rotate(-1deg); }
+  80%     { transform: translate(2px, -2px) rotate(1deg); }
+}
+@keyframes hueShift {
+  0%   { filter: hue-rotate(0deg) saturate(1.05); }
+  50%  { filter: hue-rotate(180deg) saturate(1.4); }
+  100% { filter: hue-rotate(360deg) saturate(1.05); }
+}
+@keyframes sway {
+  0%, 100% { transform: translateX(-50%) rotate(-2deg); }
+  50%      { transform: translateX(-50%) rotate(2deg); }
+}
+@keyframes screenZoom {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50%      { transform: scale(1.025) rotate(0.6deg); }
+}
+@keyframes bobble {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-6px) rotate(2deg); }
+}
+@keyframes bobbleAlt {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-8px) rotate(-3deg); }
+}
+/* Purchase wobble keeps translate(-50%) so items stay centered while bobbing */
+@keyframes purchaseBobble {
+  0%, 100% { transform: translate(-50%, 0)    scale(1) rotate(0deg); }
+  50%      { transform: translate(-50%, -5px) scale(1) rotate(2deg); }
+}
+
+/* ---------- TIER 1 (cps >= 5) ---------- */
+.fancy-1 .pot-wrap { animation: idleWobble 2.4s ease-in-out infinite; }
+.fancy-1 #glow     { opacity: 0.25 !important; animation: spinSlow 10s linear infinite; }
+
+/* ---------- TIER 2 (cps >= 50) ---------- */
+.fancy-2 .pot-wrap { animation: idleWobble 1.8s ease-in-out infinite; }
+.fancy-2 #glow     { opacity: 0.4 !important; animation: spinSlow 6s linear infinite; }
+.fancy-2 .chalk-row {
+  background: linear-gradient(90deg, #ff7eb9, #7afcff, #feff9c, #b685ff, #ff7eb9);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none !important;
+  animation: rainbow 3s linear infinite;
+}
+
+/* ---------- TIER 3 (cps >= 200) ---------- */
+.fancy-3 .pot-wrap { animation: idleWobble 1.4s ease-in-out infinite; }
+.fancy-3 #cook-area { animation: sway 2.4s ease-in-out infinite; }
+.fancy-3 #glow      { opacity: 0.6 !important; animation: spinSlow 4s linear infinite; }
+.fancy-3 .stove,  .fancy-3 .basket-decor  { animation: bobble    2.8s ease-in-out infinite; }
+.fancy-3 .coffee, .fancy-3 .cactus        { animation: bobbleAlt 2.8s ease-in-out infinite; }
+.fancy-3 .purchase.show { animation: purchaseBobble 3.4s ease-in-out infinite 500ms; }
+
+/* ---------- TIER 4 (cps >= 1000) ---------- */
+.fancy-4 #bg-wall, .fancy-4 #bg-counter { animation: hueShift 8s linear infinite; }
+.fancy-4 .pot-wrap   { animation: vibratePot 0.18s linear infinite; }
+.fancy-4 #cook-area  { animation: sway 1.8s ease-in-out infinite; }
+.fancy-4 #glow       { opacity: 0.7 !important; animation: spinSlow 2.5s linear infinite; }
+.fancy-4 #chalkboard { box-shadow: 0 0 24px rgba(255, 220, 100, 0.7); }
+.fancy-4 .stove,  .fancy-4 .basket-decor  { animation: bobble    1.8s ease-in-out infinite; }
+.fancy-4 .coffee, .fancy-4 .cactus        { animation: bobbleAlt 1.8s ease-in-out infinite; }
+.fancy-4 .purchase.show { animation: purchaseBobble 2.2s ease-in-out infinite 500ms; }
+
+/* ---------- TIER 5 (cps >= 5000) ---------- */
+.fancy-5 #scene { animation: screenZoom 1.6s ease-in-out infinite; }
+.fancy-5 #bg-wall, .fancy-5 #bg-counter { animation: hueShift 3s linear infinite; }
+.fancy-5 .pot-wrap   { animation: vibratePot 0.12s linear infinite; }
+.fancy-5 #cook-area  { animation: sway 1.2s ease-in-out infinite; }
+.fancy-5 #glow       { opacity: 0.85 !important; animation: spinSlow 1.6s linear infinite; }
+.fancy-5 #chalkboard { box-shadow: 0 0 30px #ff7eb9, 0 0 60px #7afcff; }
+.fancy-5 .chalk-row {
+  background: linear-gradient(90deg, #ff7eb9, #7afcff, #feff9c, #b685ff, #ff7eb9);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none !important;
+  animation: rainbow 1s linear infinite;
+}
+.fancy-5 .stove,  .fancy-5 .basket-decor  { animation: bobble    1.2s ease-in-out infinite; }
+.fancy-5 .coffee, .fancy-5 .cactus        { animation: bobbleAlt 1.2s ease-in-out infinite; }
+.fancy-5 .purchase.show { animation: purchaseBobble 1.6s ease-in-out infinite 500ms; }
+
+/* ---------- juicy float-coin at high tiers ---------- */
+.fancy-3 .float-coin, .fancy-4 .float-coin, .fancy-5 .float-coin {
+  font-size: 2.4rem;
+  background: linear-gradient(90deg, #ffe66b, #ff7eb9, #7afcff, #feff9c);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px #fff, 0 2px 0 rgba(0,0,0,0.5);
+  animation: floatUp 1100ms ease-out forwards, rainbow 1.5s linear infinite;
+}
