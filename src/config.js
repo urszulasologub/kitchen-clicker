@@ -248,7 +248,7 @@ export const UPGRADES = [
     sprite: 'Environment/Shelf/cheese.png',
     requires: ['cheesestand'],
     // Pile cheese pieces on top of the cheese stand — % of cheese-stand box
-    layout: { container: 'cheesestand', x: 25, y: 12, stepX: 25, stepY: 8, perRow: 3, max: 9, size: 30 },
+    layout: { container: 'cheesestand', x: 18, y: -30, stepX: 20, stepY: 0, perRow: 4, max: 4, size: 40 },
   },
   {
     id: 'spice', name: 'Spice Rack', desc: '+30 / sec • +5 per click',
