@@ -13,7 +13,7 @@ import {
 } from './config.js';
 import { rand, fmt, spritePath } from './util.js';
 import {
-  spawnDish, dishSize, pickSplashFor, playSplash, showGlow,
+  spawnDish, spawnIngredient, dishSize, pickSplashFor, playSplash, showGlow,
   spawnFloat, spawnFlavor, retriggerClass, flashScreen,
   refreshProgressUI, hideProgressUI,
 } from './effects.js';
@@ -38,7 +38,7 @@ export function pickDish() {
   return pool[pool.length - 1];
 }
 
-function dishByName(name) {
+export function dishByName(name) {
   return DISHES.find(d => d.name === name);
 }
 
@@ -95,6 +95,8 @@ export function cook() {
     completeDish(dish);
   } else {
     refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+    // Animate one of the dish's ingredients popping out of the pot
+    spawnIngredient(dish, { offsetX: (Math.random() - 0.5) * 80, size: 70 });
   }
 }
 

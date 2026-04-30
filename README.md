@@ -1,6 +1,8 @@
 # Kitchen Clicker
 
-A cute kitchen-themed idle clicker. Click the pot to cook breakfast dishes, earn coins, and buy upgrades that unlock ingredients, kitchen tools and passive income. As your cps grows, the kitchen escalates through five tiers of visual chaos, ending in full Breakfast Disco.
+![demo](demo.gif)
+
+You start with one egg, an empty kitchen, and a pot that pays out a pittance per click. Cook your way out of it: stack ingredients on shelves, drop a fridge into the corner, sprout a coffee maker, and slowly upgrade from boiled-egg poverty to a full Breakfast Disco where the walls hue-shift and pancakes rain from the sky. Every recipe needs the right ingredients (and the right gear — no fried eggs without a stove), every cook rolls bad / regular / awesome with a payout to match, and every coin you spend visibly fills the kitchen.
 
 Built with vanilla HTML/CSS/JS (ES modules) — no framework, no build step. Saves to `localStorage`. Designed to deploy as static files to GitHub Pages.
 

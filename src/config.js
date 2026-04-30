@@ -199,7 +199,7 @@ export const UPGRADES = [
     unlocks: ['milk'],
     sprite: 'Environment/Shelf/blue_bottle.png',
     // Top door shelf of the fridge — % of fridge box
-    layout: { container: 'fridge', x: 60, y: 19, stepX: 6.8, stepY: -2.5, perRow: 5, max: 10, size: 50 },
+    layout: { container: 'fridge', x: 57, y: 19, stepX: 3.4, stepY: -2.5, perRow: 10, max: 20, size: 50 },
   },
   {
     id: 'kettle', name: 'Coffee Kettle', desc: '+5 / sec • +2 per click',
@@ -247,8 +247,8 @@ export const UPGRADES = [
     unlocks: ['cheese'],
     sprite: 'Environment/Shelf/cheese.png',
     requires: ['cheesestand'],
-    // Top main shelf of the fridge — % of fridge box
-    layout: { container: 'fridge', x: 11, y: 17, stepX: 11, stepY: -2, perRow: 4, max: 12, size: 56 },
+    // Pile cheese pieces on top of the cheese stand — % of cheese-stand box
+    layout: { container: 'cheesestand', x: 25, y: 12, stepX: 25, stepY: 8, perRow: 3, max: 9, size: 30 },
   },
   {
     id: 'spice', name: 'Spice Rack', desc: '+30 / sec • +5 per click',
@@ -284,7 +284,7 @@ export const UPGRADES = [
     unlocks: ['butter'],
     sprite: 'Environment/Shelf/butter.png',
     // Bottom main shelf of the fridge (right side, next to bananas) — % of fridge box
-    layout: { container: 'fridge', x: 52.0, y: 60.6, stepX: 4.1, stepY: 4.4, perRow: 3, max: 9, size: 38 },
+    layout: { container: 'fridge', x: 13.0, y: 19, stepX: 4.1, stepY: -3, perRow: 4, max: 8, size: 38 },
   },
   {
     id: 'michelin', name: 'Michelin Touch', desc: '−5% bad • +10% awesome',

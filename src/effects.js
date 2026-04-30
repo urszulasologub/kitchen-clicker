@@ -25,6 +25,36 @@ export function spawnDish(spritePathRel, opts = {}) {
   setTimeout(() => img.remove(), opts.auto ? 850 : 1150);
 }
 
+// Real-ingredient tag → sprite. Tools (stove/oven/blender) are excluded
+// — they're equipment, not things that fly out of the pot.
+const INGREDIENT_SPRITES = {
+  egg:       'Environment/Shelf/egg.png',
+  milk:      'Environment/Shelf/blue_bottle.png',
+  bread:     'Environment/Shelf/bread.png',
+  banana:    'Environment/Shelf/banana.png',
+  blueberry: 'Environment/Shelf/blueberrys.png',
+  cheese:    'Environment/Shelf/cheese.png',
+  salami:    'Environment/Shelf/salami.png',
+  butter:    'Environment/Shelf/butter.png',
+  oats:      'Environment/Shelf/oats_base.png',
+  flour:     'Environment/Shelf/flour_base.png',
+};
+
+// Pop one random ingredient of the given dish out of the pot.
+// Used during cooking so the visualization matches the recipe in progress
+// — a Pancakes cook shows flour / egg / milk popping, not random foods.
+export function spawnIngredient(dish, opts = {}) {
+  if (!dish) return;
+  const realTags = dish.requires.filter(r => INGREDIENT_SPRITES[r]);
+  if (realTags.length === 0) return;
+  const tag = realTags[Math.floor(Math.random() * realTags.length)];
+  spawnDish(INGREDIENT_SPRITES[tag], {
+    offsetX: opts.offsetX || 0,
+    size: opts.size || 60,
+    auto: opts.auto !== false,
+  });
+}
+
 // ---------- Ghost finger (auto-cook) ----------
 
 export function spawnGhostFinger(offsetX = 0) {

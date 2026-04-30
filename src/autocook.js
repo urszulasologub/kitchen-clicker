@@ -7,10 +7,10 @@ import { $pot } from './dom.js';
 import { state } from './state.js';
 import { fmt } from './util.js';
 import {
-  spawnDish, spawnGhostFinger, dishSize, playSplash, spawnFloat, retriggerClass,
+  spawnIngredient, spawnGhostFinger, playSplash, spawnFloat, retriggerClass,
 } from './effects.js';
 import { SPLASH_TIERS } from './config.js';
-import { pickDish } from './cooking.js';
+import { pickDish, dishByName } from './cooking.js';
 
 const MAX_VISUAL_RATE = 8;     // hz cap
 const MAX_CATCHUP_FRAMES = 4;  // after a tab-switch, only fire this many at once
@@ -23,7 +23,9 @@ function visRate() {
 }
 
 function autoVisualClick() {
-  const dish = pickDish();
+  // Use the dish currently being cooked so ingredients match the recipe.
+  // Fall back to a random pick if nothing's in progress yet.
+  const dish = (state.currentDish && dishByName(state.currentDish)) || pickDish();
   if (!dish) return;
   const offX = (Math.random() - 0.5) * 160;
   const fingerX = offX * 0.5;
@@ -31,12 +33,11 @@ function autoVisualClick() {
   spawnGhostFinger(fingerX);
   retriggerClass($pot, 'click');
 
-  // Slight delay so the finger lands before the dish pops
+  // Slight delay so the finger lands before the ingredient pops
   setTimeout(() => {
-    spawnDish(`Dish/${dish.name}.png`, {
+    spawnIngredient(dish, {
       offsetX: offX,
-      size: dishSize() * (0.7 + Math.random() * 0.2),
-      auto: true,
+      size: 50 + Math.random() * 20,
     });
     if (Math.random() < 0.8) playSplash(SPLASH_TIERS[0]); // tiny splash
   }, 110);

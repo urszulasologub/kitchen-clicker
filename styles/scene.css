@@ -142,17 +142,24 @@
 }
 .furniture-decor.appear { animation: decorDrop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-/* Cheese Stand: sits on the top shelf of the furniture cabinet */
+/* Cheese Stand: sits on the top shelf of the furniture cabinet.
+   This is a positioned container so cheese pieces can pile on top of it
+   using percentages (resize-safe, like the fridge). */
 .cheese-stand-decor {
   position: absolute;
   left:  var(--cheesestand-left);
   top:   var(--cheesestand-top);
   width: var(--cheesestand-width);
-  height: auto;
   transform: translate(-50%, -50%);
   z-index: 1;
   pointer-events: none;
   filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+.cheese-stand-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
 }
 .cheese-stand-decor.appear { animation: decorPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
 

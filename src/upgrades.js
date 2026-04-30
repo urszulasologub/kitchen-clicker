@@ -1,6 +1,6 @@
 // Upgrade card UI + purchases (the items that pile up on shelves and counter).
 
-import { $upgrades, $purchases, $fridgeItems, $book } from './dom.js';
+import { $upgrades, $purchases, $fridgeItems, $cheeseStandDecor, $book } from './dom.js';
 import { state, save } from './state.js';
 import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config.js';
 import { fmt, spritePath } from './util.js';
@@ -164,10 +164,16 @@ export function spawnPurchase(upg) {
   const row = Math.floor(idx / layout.perRow);
   const col = idx % layout.perRow;
 
-  const inFridge = layout.container === 'fridge';
-  // Jitter — units match the layout's coordinate space (% inside fridge, vw/vh on the scene)
-  const jx = (Math.random() - 0.5) * (inFridge ? 1.0 : 0.4);
-  const jy = (Math.random() - 0.5) * (inFridge ? 0.5 : 0.3);
+  // Containers that use percentage-positioning (resize-safe overlay boxes)
+  const PERCENT_CONTAINERS = {
+    fridge:      $fridgeItems,
+    cheesestand: $cheeseStandDecor,
+  };
+  const percentTarget = PERCENT_CONTAINERS[layout.container];
+
+  // Jitter — units match the layout's coordinate space
+  const jx = (Math.random() - 0.5) * (percentTarget ? 1.0 : 0.4);
+  const jy = (Math.random() - 0.5) * (percentTarget ? 0.5 : 0.3);
   const x = layout.x + col * layout.stepX + jx;
   const y = layout.y + row * layout.stepY + jy;
 
@@ -178,11 +184,11 @@ export function spawnPurchase(upg) {
   // Higher rows render behind; later items in row render in front.
   img.style.zIndex = String(2 + (12 - row) * 3 + col);
 
-  if (inFridge) {
-    // Percentages inside the fridge box → resize-safe.
+  if (percentTarget) {
+    // Percentages inside a fixed-size container → resize-safe.
     img.style.left = x + '%';
     img.style.top  = y + '%';
-    $fridgeItems.appendChild(img);
+    percentTarget.appendChild(img);
   } else {
     img.style.left = x + 'vw';
     if (layout.anchor === 'bottom') img.style.bottom = y + 'vh';
