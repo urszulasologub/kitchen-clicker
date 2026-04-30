@@ -2,23 +2,41 @@
 // Pure data — no DOM, no side effects.
 
 // ---------- Tunable constants ----------
-export const FAIL_RATE = 0.04;            // probability a completed dish fails
-export const POSITIVE_FLAVOR_RATE = 0.30; // chance of bonus positive flavor on success
 export const COST_SCALING = 1.22;         // each repurchase multiplies cost by this
 export const STARTER_UNLOCKS = ['pan', 'egg']; // tags unlocked at game start
 
-// Tools don't count as ingredients for click-cost purposes
-const TOOL_TAGS = new Set(['pan', 'oven', 'blender']);
+// Cooking quality — rolled at dish completion.
+//   BAD     → 0 coins, big red banner, screen shake
+//   REGULAR → 1× payout, small calm text ("served.")
+//   AWESOME → 5× payout, huge rainbow banner, gold flash
+// Player starts struggling — one-time upgrades shift the odds in their favor.
+export const BASE_BAD_RATE     = 0.25;    // ~1 in 4 dishes ruined at start
+export const BASE_AWESOME_RATE = 0.05;    // ~1 in 20 dishes great at start
+export const MIN_BAD_RATE      = 0.03;    // floor — even master chefs slip
+export const MAX_AWESOME_RATE  = 0.45;    // cap — awesome can't be the norm
+export const AWESOME_MULT      = 5;       // payout multiplier on awesome cooks
 
-// How many click-progress points a dish needs to complete.
-// Scales with the count of real ingredients (excluding tools).
+// Effort to cook a dish (progress points). Decoupled from `value` (payout):
+// a dish always needs five times its dollar worth in clicks, with a floor
+// of 10 so the very cheapest start at exactly 10 clicks. Click power AND cps
+// both fill the bar, so as you level up these costs evaporate.
+//   value=1   → 10   (Boiled Egg, Crispy Toast)
+//   value=5   → 25   (Salami Rose, Egg Sandwich)
+//   value=22  → 110  (Pancakes, Cheese Salami Sandwich)
+//   value=80  → 400  (Charcuterie Board)
+//   value=130 → 650  (Smoothie)
+//   value=200 → 1000 (Fondue, Mug Cake)
+//   value=380 → 1900 (Quiche)
+export const MIN_CLICK_COST = 10;
+export const CLICK_COST_PER_VALUE = 5;
 export function clickCostOf(dish) {
-  const real = dish.requires.filter(r => !TOOL_TAGS.has(r)).length;
-  return Math.max(3, real * 3);
+  return Math.max(MIN_CLICK_COST, dish.value * CLICK_COST_PER_VALUE);
 }
 
-// Fancy tier thresholds (cps required to enter each tier)
-export const FANCY_THRESHOLDS = [0, 5, 50, 200, 1000, 5000];
+// Fancy tier thresholds (cps required to enter each tier).
+// Pushed up so the kitchen stays calm during the early grind and frenzy
+// modes feel earned, not handed out.
+export const FANCY_THRESHOLDS = [0, 25, 150, 600, 2500, 12000];
 export const FANCY_LABELS = [
   '', 'WARMING UP!', 'GETTING TASTY!', 'KITCHEN PARTY!',
   'COOKING FRENZY!', 'BREAKFAST DISCO!!!',
@@ -89,6 +107,43 @@ export const FAILED_DISHES = [
   'Mess_in_a_Mug', 'Monster_Cocktail', 'Salty_Mess', 'Scary_Porridge',
 ];
 
+// Pick a thematically-appropriate spoiled-dish sprite based on the recipe's
+// ingredients — a ruined Boiled Egg shouldn't look like a ruined porridge.
+export function spoiledFor(dish) {
+  const tags = new Set(dish.requires);
+  const opts = [];
+
+  // Strong primary themes — distinct ingredients get their own mess sprite.
+  if (tags.has('banana'))    opts.push('Banana_Mess', 'Baby_Groot');
+  if (tags.has('blueberry')) opts.push('Blueberry_Mess');
+  if (tags.has('egg'))       opts.push('Eggy_Mess');
+  if (tags.has('oats'))      opts.push('Scary_Porridge');
+  if (tags.has('blender'))   opts.push('Monster_Cocktail');
+  if (tags.has('milk') && !tags.has('oats') && !tags.has('blender')) {
+    opts.push('Mess_in_a_Mug', 'Getting_Mugged');
+  }
+
+  // Sandwich-y combinations get the Bland Sandwich
+  if (tags.has('bread') && (tags.has('cheese') || tags.has('salami'))) {
+    opts.push('Bland_Sandwich');
+  }
+
+  // Fallback by remaining ingredient if nothing strong matched
+  if (opts.length === 0) {
+    if (tags.has('bread'))       opts.push('Bland_Sandwich');
+    else if (tags.has('salami')) opts.push('Flowery_Mess', 'Salty_Mess'); // Salami Rose
+    else if (tags.has('cheese')) opts.push('Salty_Mess', 'Covered_Mess');
+    else if (tags.has('butter')) opts.push('Covered_Mess', 'Salty_Mess'); // Ghee, etc.
+    else if (tags.has('flour'))  opts.push('Food_Drawing', 'Fancy_Mess');
+    else if (tags.has('oven'))   opts.push('Fancy_Mess');
+  }
+
+  if (opts.length === 0) {
+    opts.push('Covered_Mess', 'Salty_Mess', 'Food_Drawing', 'Fancy_Mess');
+  }
+  return opts[Math.floor(Math.random() * opts.length)];
+}
+
 // ---------- Upgrades ----------
 // type:    'click' (adds to click power) or 'auto' (adds to coins/sec)
 // power:   amount added per purchase
@@ -102,7 +157,8 @@ export const UPGRADES = [
     icon: 'Icons/banana_chalk.png', baseCost: 25, type: 'click', power: 1,
     unlocks: ['banana'],
     sprite: 'Environment/Shelf/banana.png',
-    layout: { anchor: 'bottom', x: 4, y: 9, stepX: 1.3, stepY: 1.0, perRow: 5, max: 25, size: 50 },
+    // Bottom main shelf of the fridge (left side) — % of fridge box
+    layout: { container: 'fridge', x: 10, y: 44, stepX: 8.2, stepY: 4.4, perRow: 5, max: 15, size: 44 },
   },
   {
     id: 'basket', name: 'Bread Basket', desc: '+2 per click • unlocks bread',
@@ -114,7 +170,13 @@ export const UPGRADES = [
     icon: 'Icons/egg_chalk.png', baseCost: 350, type: 'auto', power: 1,
     unlocks: ['egg'],
     sprite: 'Environment/Shelf/egg.png',
-    layout: { anchor: 'bottom', x: 12, y: 8, stepX: 1.1, stepY: 1.0, perRow: 6, max: 30, size: 40 },
+    // Bottom door shelf of the fridge — % of fridge box
+    layout: { container: 'fridge', x: 58, y: 48, stepX: 4.9, stepY: -4.4, perRow: 6, max: 12, size: 40 },
+  },
+  {
+    id: 'towel', name: 'Hand Towel', desc: '−5% bad cooks',
+    icon: 'Icons/chalk3_chalk.png', baseCost: 500,
+    oneTime: true, badReduce: 0.05,
   },
   {
     id: 'knife', name: 'Knife Block', desc: '+3 per click • +1 / sec',
@@ -126,7 +188,8 @@ export const UPGRADES = [
     icon: 'Icons/milk_chalk.png', baseCost: 1500, type: 'click', power: 2,
     unlocks: ['milk'],
     sprite: 'Environment/Shelf/blue_bottle.png',
-    layout: { anchor: 'top', x: 16, y: 13, stepX: 1.7, stepY: 1.2, perRow: 5, max: 25, size: 65 },
+    // Top door shelf of the fridge — % of fridge box
+    layout: { container: 'fridge', x: 60, y: 19, stepX: 6.8, stepY: -2.5, perRow: 5, max: 10, size: 50 },
   },
   {
     id: 'blender', name: 'Blender', desc: '+3 per click • smoothies & milkshakes',
@@ -134,18 +197,30 @@ export const UPGRADES = [
     oneTime: true, unlocks: ['blender'],
   },
   {
+    id: 'cookbook', name: 'Cookbook', desc: '+5% awesome cooks',
+    icon: 'Icons/chalk4_chalk.png', baseCost: 6000,
+    oneTime: true, awesomeBoost: 0.05,
+  },
+  {
     id: 'blueberry', name: 'Blueberry Picker', desc: '+3 / sec • blueberries',
     icon: 'Icons/blueberry_chalk.png', baseCost: 8000, type: 'auto', power: 3,
     unlocks: ['blueberry'],
     sprite: 'Environment/Shelf/blueberrys.png',
-    layout: { anchor: 'top', x: 6, y: 14, stepX: 1.4, stepY: 1.0, perRow: 6, max: 30, size: 50 },
+    // Middle door shelf of the fridge — % of fridge box
+    layout: { container: 'fridge', x: 13, y: 35, stepX: 6.0, stepY: -2.5, perRow: 6, max: 12, size: 42 },
+  },
+  {
+    id: 'sharpknives', name: 'Sharp Knives', desc: '−5% bad • +3% awesome',
+    icon: 'Icons/error_chalk.png', baseCost: 18000,
+    oneTime: true, badReduce: 0.05, awesomeBoost: 0.03,
   },
   {
     id: 'cheese', name: 'Cheese Stand', desc: '+10 / sec • cheese',
     icon: 'Icons/cheese_chalk.png', baseCost: 25000, type: 'auto', power: 10,
     unlocks: ['cheese'],
     sprite: 'Environment/Shelf/cheese.png',
-    layout: { anchor: 'bottom', x: 30, y: 38, stepX: 2.0, stepY: 1.4, perRow: 3, max: 12, size: 70 },
+    // Top main shelf of the fridge — % of fridge box
+    layout: { container: 'fridge', x: 11, y: 17, stepX: 11, stepY: -2, perRow: 4, max: 12, size: 56 },
   },
   {
     id: 'spice', name: 'Spice Rack', desc: '+30 / sec • +3 per click',
@@ -158,11 +233,16 @@ export const UPGRADES = [
     oneTime: true, unlocks: ['oven'],
   },
   {
+    id: 'plating', name: 'Plating Course', desc: '+8% awesome cooks',
+    icon: 'Icons/flower_chalk.png', baseCost: 180000,
+    oneTime: true, awesomeBoost: 0.08,
+  },
+  {
     id: 'salami', name: 'Salami Roll', desc: '+40 / sec • salami',
     icon: 'Icons/salami_chalk.png', baseCost: 200000, type: 'auto', power: 40,
     unlocks: ['salami'],
     sprite: 'Environment/Shelf/salami.png',
-    layout: { anchor: 'top', x: 50, y: 16, stepX: 1.3, stepY: 0.8, perRow: 6, max: 30, size: 50 },
+    layout: { container: 'fridge', x: 10, y: 67, stepX: 5, stepY: -2, perRow: 8, max: 16, size: 56 },
   },
   {
     id: 'bread', name: 'Bread Loaf', desc: '+100 / sec',
@@ -175,7 +255,13 @@ export const UPGRADES = [
     icon: 'Icons/butter_chalk.png', baseCost: 1500000, type: 'click', power: 6,
     unlocks: ['butter'],
     sprite: 'Environment/Shelf/butter.png',
-    layout: { anchor: 'top', x: 27, y: 14, stepX: 1.5, stepY: 1.0, perRow: 5, max: 25, size: 50 },
+    // Bottom main shelf of the fridge (right side, next to bananas) — % of fridge box
+    layout: { container: 'fridge', x: 52.0, y: 60.6, stepX: 4.1, stepY: 4.4, perRow: 3, max: 9, size: 38 },
+  },
+  {
+    id: 'michelin', name: 'Michelin Touch', desc: '−5% bad • +10% awesome',
+    icon: 'Icons/unknwon_chalk.png', baseCost: 3000000,
+    oneTime: true, badReduce: 0.05, awesomeBoost: 0.10,
   },
   {
     id: 'oats', name: 'Oats Jar', desc: '+300 / sec • oats',
@@ -199,13 +285,20 @@ export const UPGRADES = [
 ];
 
 // ---------- Cooking flavor messages ----------
-export const POSITIVE_FLAVORS = [
-  'PERFECT!', 'BIG TIP!', 'CUSTOMER LOVED IT!', 'YUM!',
-  "CHEF'S KISS!", 'DELICIOUS!', 'FIVE STARS!',
+// AWESOME — huge rainbow banner + gold flash
+export const AWESOME_FLAVORS = [
+  'PERFECT!', 'MASTERPIECE!', "CHEF'S KISS!", 'BIG TIP!',
+  'CUSTOMER LOVED IT!', 'EXQUISITE!', 'FIVE STARS!', 'MICHELIN-WORTHY!',
 ];
+// BAD — big red shake + red flash
 export const NEGATIVE_FLAVORS = [
   'OVERCOOKED!', 'UNDERCOOKED!', 'BURNT!', 'RAW INSIDE!',
   'TOO SALTY!', 'CUSTOMER REFUSED!', 'INEDIBLE!', "WHAT IS THAT?",
+];
+// REGULAR — small italic text near the coin, no flash, no banner
+export const CALM_FLAVORS = [
+  'served.', 'plated.', 'ok.', 'fine.', 'good enough.',
+  'on the menu.', 'passable.', 'edible.', 'served warm.',
 ];
 
 // Splash animation tiers — chosen by dish value

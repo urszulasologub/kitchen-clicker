@@ -71,16 +71,48 @@
   width: auto;
   filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
 }
-.stove   { left: 4vw;  bottom: 7vh;  height: 280px; }
-.coffee  { left: 22vw; bottom: 30vh; height: 170px; }
+.stove   { left: 4vw;  bottom: 10vh;  height: 350px; }
+.coffee  { left: 30vw; bottom: 12vh; height: 220px; }
 .cactus  { right: 6vw; bottom: 30vh; height: 160px; }
+
+/* Fridge: back-left of the kitchen, behind the painted counter.
+   The fridge sprite and the #fridge-items overlay both pull from the
+   same custom properties so items inside stay aligned no matter how
+   the browser is resized. */
+:root {
+  --fridge-left:   1vw;
+  --fridge-bottom: 35vh;
+  --fridge-height: 740px;
+  --fridge-width:  702px;  /* 740 × (932/983) — natural sprite ratio */
+}
+.fridge {
+  position: absolute;
+  left:   var(--fridge-left);
+  bottom: var(--fridge-bottom);
+  height: var(--fridge-height);
+  width:  var(--fridge-width);
+  z-index: 0;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,0.35));
+  pointer-events: none;
+}
+/* Overlay container that exactly matches the fridge's box.
+   Items inside use percentages so they scale with the (fixed-pixel) fridge. */
+#fridge-items {
+  position: absolute;
+  left:   var(--fridge-left);
+  bottom: var(--fridge-bottom);
+  height: var(--fridge-height);
+  width:  var(--fridge-width);
+  z-index: 0;
+  pointer-events: none;
+}
 
 /* Bread basket — layered base + animated cloth cover */
 .basket-decor {
   position: absolute;
-  right: 24vw;
-  bottom: 8vh;
-  width: 200px;
+  right: 20vw;
+  bottom: 12vh;
+  width: 350px;
   z-index: 3;
   filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
   transition: transform 200ms;

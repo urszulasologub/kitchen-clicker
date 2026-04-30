@@ -104,6 +104,24 @@
   text-shadow: 0 0 6px #c87a1a, 0 2px 0 #6b3a0a, 0 0 12px #ffe66b;
   animation: flavorFloat 1500ms ease-out forwards;
 }
+
+/* CALM variant — quiet acknowledgement of a regular cook.
+   Lower on screen, small italic, no shake, no flash. */
+.flavor.calm {
+  top: 48%;
+  font-size: 0.95rem;
+  font-weight: normal;
+  font-style: italic;
+  letter-spacing: 1px;
+  color: rgba(255, 248, 224, 0.78);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55);
+  animation: flavorFadeCalm 1100ms ease-out forwards;
+}
+@keyframes flavorFadeCalm {
+  0%   { transform: translate(-50%, 8px) scale(0.92); opacity: 0; }
+  20%  { transform: translate(-50%, -3px) scale(1); opacity: 0.9; }
+  100% { transform: translate(-50%, -45px) scale(1); opacity: 0; }
+}
 .flavor.negative {
   color: #ff8a8a;
   text-shadow: 0 0 6px #6b0000, 0 2px 0 #2a0000;
@@ -222,13 +240,23 @@
   width: 0%;
   background: linear-gradient(90deg, #ffe66b, #b85f1a);
   border-radius: 6px;
-  transition: width 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Short linear transition — bouncy easing was masking cps's small per-frame
+     increments since each tick interrupted the spring before it settled. */
+  transition: width 0.06s linear;
   box-shadow: 0 0 8px rgba(255, 220, 100, 0.7);
 }
 .progress-clicks {
   font-size: 0.8rem;
   opacity: 0.85;
   letter-spacing: 1px;
+}
+.progress-value {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #ffe66b;
+  text-shadow: 0 0 6px rgba(200, 140, 60, 0.6);
+  letter-spacing: 1px;
+  margin-top: 2px;
 }
 
 /* ---------- Particles (leaves drifting at high tiers) ---------- */

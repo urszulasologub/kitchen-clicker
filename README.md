@@ -1,4 +1,4 @@
-# Little Chef Clicker
+# Kitchen Clicker
 
 A cute kitchen-themed idle clicker. Click the pot to cook breakfast dishes, earn coins, and buy upgrades that unlock ingredients, kitchen tools and passive income. As your cps grows, the kitchen escalates through five tiers of visual chaos, ending in full Breakfast Disco.
 
@@ -15,8 +15,6 @@ npx serve                       # if you have Node
 
 Then visit <http://localhost:8000>.
 
-For GitHub Pages: push the repo and turn on Pages from `main` branch root.
-
 ## Credits
 
-All sprites are from the **[Little Chef sprite pack](https://truebiger.itch.io/little-chef)** by **Hello Erika** ([@helloerika](https://www.youtube.com/@helloerika)), released under CC0.
+All sprites in Sprites/Sprites directory are from the **[Little Chef sprite pack](https://truebiger.itch.io/little-chef)** by **Hello Erika** ([@helloerika](https://www.youtube.com/@helloerika)), released under CC0.

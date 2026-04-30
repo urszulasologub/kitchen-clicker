@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Little Chef Clicker</title>
+  <title>Kitchen Clicker</title>
   <link rel="stylesheet" href="styles/base.css" />
   <link rel="stylesheet" href="styles/scene.css" />
   <link rel="stylesheet" href="styles/cook.css" />
@@ -15,8 +15,8 @@
 </head>
 <body>
   <div id="scene">
-    <img id="bg-wall" src="Sprites/Sprites/Background/wall.png" alt="" />
-    <img id="bg-counter" src="Sprites/Sprites/Background/counter.png" alt="" />
+    <img id="bg-wall" src="Sprites/Custom-sprites/Background/wall.png" alt="" />
+    <img id="bg-counter" src="Sprites/Custom-sprites/Background/counter.png" alt="" />
 
     <!-- Day/night cycle: tinted overlay sweeping across real-world hours -->
     <div id="day-night-overlay"></div>
@@ -60,11 +60,17 @@
           <div class="progress-fill" id="progress-fill"></div>
         </div>
         <div class="progress-clicks" id="progress-clicks"></div>
+        <div class="progress-value" id="progress-value"></div>
       </div>
     </div>
 
     <!-- Screen flash on dish completion -->
     <div id="screen-flash" class="screen-flash"></div>
+
+    <!-- Fridge: back-left of the kitchen, behind the counter -->
+    <img class="fridge" src="Sprites/Custom-sprites/Objects/fridge.png" alt="" />
+    <!-- Items piled on the fridge shelves. Same box, % positioning. -->
+    <div id="fridge-items"></div>
 
     <!-- Fixed counter decor -->
     <img class="counter-decor stove"  src="Sprites/Sprites/Environment/Counter/stove.png" alt="" />

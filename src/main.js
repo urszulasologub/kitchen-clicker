@@ -3,7 +3,7 @@
 import { $coins, $cps, $click, $pot, $resetBtn } from './dom.js';
 import { state, load, save, reset, startAutoSave } from './state.js';
 import { fmt, spritePath } from './util.js';
-import { cook, syncCookingUI } from './cooking.js';
+import { cook, syncCookingUI, cookingTick } from './cooking.js';
 import { autoTick } from './autocook.js';
 import { applyFancyTier, leafTick } from './fancy.js';
 import { buildUpgrades, refreshUpgrades, restorePurchasesFromState } from './upgrades.js';
@@ -69,6 +69,7 @@ function frame(t) {
   }
   state.playTimeSeconds += dt;
 
+  cookingTick(dt);  // cps fills the active-dish progress bar
   autoTick(dt);
   leafTick(dt);
   applyFancyTier();

@@ -4,7 +4,7 @@
 // `fancy` tier that the runtime updates. Functions on this module mutate it
 // and broadcast `state-changed` so views can refresh on demand.
 
-import { STARTER_UNLOCKS } from './config.js';
+import { STARTER_UNLOCKS, BASE_BAD_RATE, BASE_AWESOME_RATE } from './config.js';
 
 const STORAGE_KEY = 'little-chef-clicker:v1';
 const SAVE_INTERVAL_MS = 5000;
@@ -24,6 +24,11 @@ function freshState() {
     // Active cooking — multiple clicks per dish
     currentDish: null,                        // dish name being cooked, or null
     cookingProgress: 0,                       // accumulated progress points
+
+    // Cook quality — modified by one-time skill upgrades
+    badRate:     BASE_BAD_RATE,
+    awesomeRate: BASE_AWESOME_RATE,
+    awesomeCooks: 0,                          // lifetime awesome count
 
     // Lifetime stats (for stats panel + achievements)
     totalEarned: 0,                           // every coin ever gained
@@ -53,6 +58,9 @@ export function save() {
     cookedRecipes:     [...state.cookedRecipes],
     currentDish:       state.currentDish,
     cookingProgress:   state.cookingProgress,
+    badRate:           state.badRate,
+    awesomeRate:       state.awesomeRate,
+    awesomeCooks:      state.awesomeCooks,
     totalEarned:       state.totalEarned,
     playTimeSeconds:   state.playTimeSeconds,
     failedCooks:       state.failedCooks,
@@ -92,6 +100,9 @@ export function load() {
   state.cookedRecipes     = new Set(data.cookedRecipes ?? []);
   state.currentDish       = data.currentDish       ?? null;
   state.cookingProgress   = data.cookingProgress   ?? 0;
+  state.badRate           = data.badRate           ?? BASE_BAD_RATE;
+  state.awesomeRate       = data.awesomeRate       ?? BASE_AWESOME_RATE;
+  state.awesomeCooks      = data.awesomeCooks      ?? 0;
   state.totalEarned       = data.totalEarned       ?? state.coins;
   state.playTimeSeconds   = data.playTimeSeconds   ?? 0;
   state.failedCooks       = data.failedCooks       ?? 0;

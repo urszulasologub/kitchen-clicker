@@ -57,11 +57,22 @@ export const ACHIEVEMENTS = [
   { id: 'all-tools',     name: 'Fully Equipped',  desc: 'Own all 6 one-time tools.',
     check: s => ['basket','blender','oven','knife','spice','hat']
                   .every(id => s.bought[id]) },
+  { id: 'all-skills',    name: 'Culinary Genius',  desc: 'Own all 5 skill upgrades.',
+    check: s => ['towel','cookbook','sharpknives','plating','michelin']
+                  .every(id => s.bought[id]) },
 
   { id: 'butterfingers', name: 'Butterfingers',   desc: 'Fail 50 cooks.',
     check: s => s.failedCooks >= 50 },
   { id: 'big-tip',       name: 'Big Tip',         desc: 'Earn $10,000 from a single dish.',
     check: s => s.biggestDishValue >= 10000 },
+
+  { id: 'first-awesome', name: 'Awesome!',        desc: 'Cook your first awesome dish.',
+    check: s => s.awesomeCooks >= 1 },
+  { id: 'awesome-100',   name: 'Five Stars',      desc: 'Cook 100 awesome dishes.',
+    check: s => s.awesomeCooks >= 100 },
+  { id: 'master-touch',  name: 'Master Touch',
+    desc: 'Reduce bad-cook chance to its minimum.',
+    check: s => s.badRate <= 0.06 },
 ];
 
 const byId = Object.fromEntries(ACHIEVEMENTS.map(a => [a.id, a]));

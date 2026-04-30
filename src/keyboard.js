@@ -20,7 +20,7 @@ export function wireKeyboard() {
         cook();
         save();
         return;
-      case 'r': case 'R':
+      case 'c': case 'C':
         e.preventDefault();
         togglePanel('recipes');
         return;

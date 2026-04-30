@@ -1,8 +1,8 @@
 // Upgrade card UI + purchases (the items that pile up on shelves and counter).
 
-import { $upgrades, $purchases, $book } from './dom.js';
-import { state } from './state.js';
-import { UPGRADES, COST_SCALING } from './config.js';
+import { $upgrades, $purchases, $fridgeItems, $book } from './dom.js';
+import { state, save } from './state.js';
+import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config.js';
 import { fmt, spritePath } from './util.js';
 import { animateBasketOpen } from './basket.js';
 
@@ -89,10 +89,12 @@ export function buy(upg) {
 
   if (upg.type === 'click') state.clickPower += upg.power;
   if (upg.type === 'auto')  state.cps        += upg.power;
-  // Optional cross-type bonus (only on first purchase of a one-time upgrade)
+  // Optional cross-type bonus + quality tweaks (first purchase of a one-time)
   if (upg.oneTime && state.bought[upg.id] === 1) {
-    if (upg.clickBonus) state.clickPower += upg.clickBonus;
-    if (upg.autoBonus)  state.cps        += upg.autoBonus;
+    if (upg.clickBonus)   state.clickPower  += upg.clickBonus;
+    if (upg.autoBonus)    state.cps         += upg.autoBonus;
+    if (upg.badReduce)    state.badRate     = Math.max(MIN_BAD_RATE, state.badRate - upg.badReduce);
+    if (upg.awesomeBoost) state.awesomeRate = Math.min(MAX_AWESOME_RATE, state.awesomeRate + upg.awesomeBoost);
   }
   if (upg.unlocks) upg.unlocks.forEach(t => state.unlocked.add(t));
 
@@ -100,6 +102,7 @@ export function buy(upg) {
   if (upg.sprite) spawnPurchase(upg);
 
   refreshUpgrades();
+  save(); // persist immediately so quick buys + reload don't lose progress
 }
 
 // ---------- Purchase items piling on shelf/counter ----------
@@ -124,22 +127,33 @@ export function spawnPurchase(upg) {
   const idx = list.length;
   const row = Math.floor(idx / layout.perRow);
   const col = idx % layout.perRow;
-  // jitter so stacks don't look gridded
-  const jx = (Math.random() - 0.5) * 0.4;
-  const jy = (Math.random() - 0.5) * 0.3;
+
+  const inFridge = layout.container === 'fridge';
+  // Jitter — units match the layout's coordinate space (% inside fridge, vw/vh on the scene)
+  const jx = (Math.random() - 0.5) * (inFridge ? 1.0 : 0.4);
+  const jy = (Math.random() - 0.5) * (inFridge ? 0.5 : 0.3);
   const x = layout.x + col * layout.stepX + jx;
   const y = layout.y + row * layout.stepY + jy;
 
   const img = document.createElement('img');
   img.className = 'purchase';
   img.src = spritePath(upg.sprite);
-  img.style.left = x + 'vw';
-  if (layout.anchor === 'bottom') img.style.bottom = y + 'vh';
-  else                            img.style.top    = y + 'vh';
   img.style.height = layout.size + 'px';
   // Higher rows render behind; later items in row render in front.
   img.style.zIndex = String(2 + (12 - row) * 3 + col);
-  $purchases.appendChild(img);
+
+  if (inFridge) {
+    // Percentages inside the fridge box → resize-safe.
+    img.style.left = x + '%';
+    img.style.top  = y + '%';
+    $fridgeItems.appendChild(img);
+  } else {
+    img.style.left = x + 'vw';
+    if (layout.anchor === 'bottom') img.style.bottom = y + 'vh';
+    else                            img.style.top    = y + 'vh';
+    $purchases.appendChild(img);
+  }
+
   list.push(img);
   requestAnimationFrame(() => img.classList.add('show'));
 }

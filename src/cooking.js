@@ -8,13 +8,13 @@
 import { $pot, $recent } from './dom.js';
 import { state } from './state.js';
 import {
-  DISHES, FAILED_DISHES, FAIL_RATE, POSITIVE_FLAVOR_RATE,
-  POSITIVE_FLAVORS, NEGATIVE_FLAVORS, SPLASH_TIERS, clickCostOf,
+  DISHES, AWESOME_FLAVORS, NEGATIVE_FLAVORS, CALM_FLAVORS,
+  AWESOME_MULT, SPLASH_TIERS, clickCostOf, spoiledFor,
 } from './config.js';
 import { rand, fmt, spritePath } from './util.js';
 import {
   spawnDish, dishSize, pickSplashFor, playSplash, showGlow,
-  spawnFloat, spawnFlavor, retriggerClass, burstLeaves, flashScreen,
+  spawnFloat, spawnFlavor, retriggerClass, flashScreen,
   refreshProgressUI, hideProgressUI,
 } from './effects.js';
 
@@ -63,7 +63,7 @@ export function syncCookingUI() {
     hideProgressUI();
     return;
   }
-  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress);
+  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress, dish.value * state.clickPower);
 }
 
 // ---------- Pot click ----------
@@ -94,65 +94,120 @@ export function cook() {
   if (state.cookingProgress >= cost) {
     completeDish(dish);
   } else {
-    refreshProgressUI(dish, cost, state.cookingProgress);
+    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
   }
+}
+
+// ---------- Passive cooking ----------
+// Called every frame from main.js. cps adds to the current dish's progress
+// bar continuously; if no dish is active, one is auto-picked so passive
+// income keeps flowing even when the player isn't clicking.
+export function cookingTick(dt) {
+  if (state.cps <= 0) return;
+
+  if (!state.currentDish) {
+    const next = pickDish();
+    if (!next) return;
+    state.currentDish = next.name;
+    state.cookingProgress = 0;
+  }
+
+  const dish = dishByName(state.currentDish);
+  if (!dish) {
+    state.currentDish = null;
+    state.cookingProgress = 0;
+    return;
+  }
+
+  state.cookingProgress += state.cps * dt;
+  const cost = clickCostOf(dish);
+
+  if (state.cookingProgress >= cost) {
+    completeDish(dish);
+  } else {
+    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+  }
+}
+
+// ---------- Quality roll ----------
+// Returns one of: 'bad', 'regular', 'awesome'.
+function rollQuality() {
+  const r = Math.random();
+  if (r < state.badRate) return 'bad';
+  if (r > 1 - state.awesomeRate) return 'awesome';
+  return 'regular';
 }
 
 // ---------- Dish completion ----------
 function completeDish(dish) {
   state.totalDishesCooked++;
-  const failed = Math.random() < FAIL_RATE;
+  const quality = rollQuality();
 
   let dishPath;
   let value = 0;
 
-  if (failed) {
+  if (quality === 'bad') {
     state.failedCooks++;
-    dishPath = `FailedDish/${rand(FAILED_DISHES)}.png`;
+    dishPath = `FailedDish/${spoiledFor(dish)}.png`;
+  } else if (quality === 'awesome') {
+    state.awesomeCooks++;
+    value = dish.value * state.clickPower * AWESOME_MULT;
+    dishPath = `Dish/${dish.name}.png`;
   } else {
     value = dish.value * state.clickPower;
-    state.coins += value;
-    state.totalEarned += value;
-    if (value > state.biggestDishValue) state.biggestDishValue = value;
     dishPath = `Dish/${dish.name}.png`;
   }
 
-  // Big celebration: extra-large dish pop, splash, glow, particle burst
-  spawnDish(dishPath, { size: dishSize() * 1.25 });
-  showGlow();
-  if (!failed) {
-    playSplash(pickSplashFor(value));
-    burstLeaves(8 + Math.min(20, Math.floor(Math.log10(value + 1) * 4)));
+  if (value > 0) {
+    state.coins += value;
+    state.totalEarned += value;
+    if (value > state.biggestDishValue) state.biggestDishValue = value;
   }
-  retriggerClass($pot, 'click-big', 600);
 
   pushRecent(dishPath);
 
-  // PROMINENT flavor banner + screen flash
   const rect = $pot.getBoundingClientRect();
   const fx = rect.left + rect.width / 2;
   const fy = rect.top - 40;
 
-  if (failed) {
+  // Visuals scale with quality
+  if (quality === 'bad') {
+    spawnDish(dishPath, { size: dishSize() * 1.25 });
+    showGlow();
+    retriggerClass($pot, 'click-big', 600);
     spawnFlavor(rand(NEGATIVE_FLAVORS), 'negative-big');
     flashScreen('red');
-  } else {
-    spawnFloat(`+$${fmt(value)}`, fx, fy, 'big');
 
+  } else if (quality === 'awesome') {
+    spawnDish(dishPath, { size: dishSize() * 1.4 });
+    showGlow();
+    playSplash(pickSplashFor(value));
+    retriggerClass($pot, 'click-big', 600);
+    spawnFloat(`+$${fmt(value)}`, fx, fy, 'big');
     if (!state.cookedRecipes.has(dish.name)) {
       state.cookedRecipes.add(dish.name);
       spawnFlavor('NEW RECIPE!', 'special-big');
       flashScreen('rainbow');
-    } else if (Math.random() < POSITIVE_FLAVOR_RATE) {
-      spawnFlavor(rand(POSITIVE_FLAVORS), 'positive-big');
-      flashScreen('gold');
     } else {
-      spawnFlavor('DONE!', 'positive-big');
+      spawnFlavor(rand(AWESOME_FLAVORS), 'positive-big');
       flashScreen('gold');
+    }
+
+  } else {
+    // REGULAR — calm, no flash, no banner. Just dish + coin + small text.
+    spawnDish(dishPath, { size: dishSize() });
+    playSplash(pickSplashFor(value));
+    spawnFloat(`+$${fmt(value)}`, fx, fy);
+    if (!state.cookedRecipes.has(dish.name)) {
+      // Discovery still gets the rainbow banner — it's a real moment.
+      state.cookedRecipes.add(dish.name);
+      spawnFlavor('NEW RECIPE!', 'special-big');
+      flashScreen('rainbow');
+    } else {
+      spawnFlavor(rand(CALM_FLAVORS), 'calm');
     }
   }
 
-  // Reset for next dish
   state.currentDish = null;
   state.cookingProgress = 0;
   hideProgressUI();

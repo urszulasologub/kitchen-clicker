@@ -13,6 +13,7 @@ export const $float       = document.getElementById('float-layer');
 export const $upgrades    = document.getElementById('upgrades');
 export const $recent      = document.getElementById('recent-list');
 export const $purchases   = document.getElementById('purchases');
+export const $fridgeItems = document.getElementById('fridge-items');
 export const $basketDecor = document.getElementById('basket-decor');
 export const $basketCover = document.getElementById('basket-cover');
 export const $particles   = document.getElementById('particle-layer');

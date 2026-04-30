@@ -3,7 +3,7 @@
 
 import { $dishLayer, $ghostLayer, $glow, $splash, $float, $particles } from './dom.js';
 import { state } from './state.js';
-import { spritePath } from './util.js';
+import { spritePath, fmt } from './util.js';
 import { SPLASH_TIERS } from './config.js';
 
 // ---------- Dish-pop ----------
@@ -91,15 +91,17 @@ const $progressIcon  = document.getElementById('progress-icon');
 const $progressName  = document.getElementById('progress-name');
 const $progressFill  = document.getElementById('progress-fill');
 const $progressClicks = document.getElementById('progress-clicks');
+const $progressValue  = document.getElementById('progress-value');
 
-export function refreshProgressUI(dish, cost, progress) {
+export function refreshProgressUI(dish, cost, progress, payout) {
   if (!$progress) return;
   $progress.classList.remove('hidden');
   $progressIcon.src = spritePath(`Dish/${dish.name}.png`);
   $progressName.textContent = dish.name.replace(/_/g, ' ');
   const pct = Math.min(100, (progress / cost) * 100);
   $progressFill.style.width = pct + '%';
-  $progressClicks.textContent = `${Math.min(progress, cost)} / ${cost}`;
+  $progressClicks.textContent = `${Math.floor(Math.min(progress, cost))} / ${cost}`;
+  if (payout != null) $progressValue.textContent = `Worth $${fmt(payout)}`;
 }
 
 export function hideProgressUI() {
