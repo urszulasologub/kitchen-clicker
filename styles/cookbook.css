@@ -72,6 +72,16 @@
   filter: grayscale(0.6);
   cursor: not-allowed;
 }
+.upgrade.gated {
+  opacity: 0.55;
+  filter: grayscale(0.7) brightness(0.9);
+  background: rgba(180, 180, 180, 0.4);
+  border-color: #777;
+}
+.upgrade.gated .cost {
+  color: #6b3a3a;
+  font-style: italic;
+}
 .upgrade.affordable { box-shadow: 0 0 10px rgba(255, 220, 100, 0.7); }
 .upgrade.owned {
   opacity: 0.85;

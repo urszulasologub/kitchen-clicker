@@ -6,13 +6,34 @@ import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config
 import { fmt, spritePath } from './util.js';
 import { animateBasketOpen } from './basket.js';
 import { animateKettleAppear } from './kettle.js';
+import {
+  animateShelvesAppear, animateFurnitureAppear, animateCheeseStandAppear,
+} from './decor.js';
 
 // ---------- Special-case purchase callbacks ----------
 // Keeps `config.js` as pure data — visual reactions live in their modules.
 const ON_BUY = {
-  basket: animateBasketOpen,
-  kettle: animateKettleAppear,
+  basket:      animateBasketOpen,
+  kettle:      animateKettleAppear,
+  shelves:     animateShelvesAppear,
+  furniture:   animateFurnitureAppear,
+  cheesestand: animateCheeseStandAppear,
 };
+
+// ---------- Prerequisites ----------
+// Returns the first unmet prerequisite ID, or null if all are met.
+function unmetRequire(upg) {
+  if (!upg.requires) return null;
+  for (const id of upg.requires) {
+    if (!state.bought[id]) return id;
+  }
+  return null;
+}
+
+function nameOf(id) {
+  const u = UPGRADES.find(x => x.id === id);
+  return u ? u.name : id;
+}
 
 // ---------- Cost scaling ----------
 export function costFor(upg) {
@@ -53,15 +74,21 @@ export function refreshUpgrades() {
     const cost = costFor(upg);
     const affordable = state.coins >= cost;
     const refs = upgradeEls[upg.id];
+    const blocker = unmetRequire(upg);
 
     if (upg.oneTime && owned > 0) {
       refs.cost.textContent = '✓ Owned';
-      refs.root.classList.remove('locked', 'affordable');
+      refs.root.classList.remove('locked', 'affordable', 'gated');
       refs.root.classList.add('owned');
+    } else if (blocker) {
+      refs.cost.textContent = `Needs ${nameOf(blocker)}`;
+      refs.root.classList.remove('affordable', 'owned');
+      refs.root.classList.add('locked', 'gated');
     } else {
       refs.cost.textContent = '$' + fmt(cost);
       refs.root.classList.toggle('locked', !affordable);
       refs.root.classList.toggle('affordable', affordable);
+      refs.root.classList.remove('gated');
     }
     if (owned > 0 && !upg.oneTime) {
       refs.count.style.display = '';
@@ -80,6 +107,10 @@ function shakeBook() {
 
 export function buy(upg) {
   if (upg.oneTime && state.bought[upg.id]) return; // already owned
+  if (unmetRequire(upg)) {
+    shakeBook();
+    return;
+  }
   const cost = costFor(upg);
   if (state.coins < cost) {
     shakeBook();

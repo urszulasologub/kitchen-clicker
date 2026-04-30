@@ -9,6 +9,7 @@ import { applyFancyTier, leafTick } from './fancy.js';
 import { buildUpgrades, refreshUpgrades, restorePurchasesFromState } from './upgrades.js';
 import { restoreBasketIfOwned, basketLoopTick } from './basket.js';
 import { restoreKettleIfOwned } from './kettle.js';
+import { restoreDecorFromState } from './decor.js';
 import { checkAchievements } from './achievements.js';
 import { togglePanel, closeAllPanels } from './panels.js';
 import { wireKeyboard } from './keyboard.js';
@@ -99,6 +100,7 @@ function init() {
   restorePurchasesFromState();
   restoreBasketIfOwned(state);
   restoreKettleIfOwned(state);
+  restoreDecorFromState(state);
   refreshUpgrades();
   updateStats();
   syncCookingUI();

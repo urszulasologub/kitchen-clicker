@@ -27,7 +27,7 @@ export const AWESOME_MULT      = 5;       // payout multiplier on awesome cooks
 //   value=130 → 1300  (Smoothie)
 //   value=200 → 2000  (Fondue, Mug Cake)
 //   value=380 → 3800  (Quiche)
-export const MIN_CLICK_COST = 10;
+export const MIN_CLICK_COST = 6;
 export const CLICK_COST_PER_VALUE = 10;
 export function clickCostOf(dish) {
   return Math.max(MIN_CLICK_COST, dish.value * CLICK_COST_PER_VALUE);
@@ -158,7 +158,7 @@ export const UPGRADES = [
     unlocks: ['banana'],
     sprite: 'Environment/Shelf/banana.png',
     // Bottom main shelf of the fridge (left side) — % of fridge box
-    layout: { container: 'fridge', x: 10, y: 44, stepX: 8.2, stepY: 4.4, perRow: 5, max: 15, size: 44 },
+    layout: { container: 'fridge', x: 10, y: 53, stepX: 8.2, stepY: -3.4, perRow: 5, max: 15, size: 44 },
   },
   {
     id: 'basket', name: 'Bread Basket', desc: '+3 per click • unlocks bread',
@@ -184,8 +184,13 @@ export const UPGRADES = [
     oneTime: true, autoBonus: 2,
   },
   {
+    id: 'shelves', name: 'Wall Shelves', desc: 'Pantry storage on the wall',
+    icon: 'Icons/blue/chalk3_chalk.png', baseCost: 1500,
+    oneTime: true,
+  },
+  {
     id: 'milk', name: 'Milk Boost', desc: '+3 per click • milk',
-    icon: 'Icons/milk_chalk.png', baseCost: 1500, type: 'click', power: 3,
+    icon: 'Icons/milk_chalk.png', baseCost: 1800, type: 'click', power: 3,
     unlocks: ['milk'],
     sprite: 'Environment/Shelf/blue_bottle.png',
     // Top door shelf of the fridge — % of fridge box
@@ -202,9 +207,15 @@ export const UPGRADES = [
     oneTime: true, unlocks: ['blender'],
   },
   {
-    id: 'cookbook', name: 'Cookbook', desc: '+5% awesome cooks',
+    id: 'furniture', name: 'Counter Furniture', desc: 'A cabinet for prep work',
+    icon: 'Icons/blue/chalk4_chalk.png', baseCost: 4500,
+    oneTime: true,
+  },
+  {
+    id: 'cookbook', name: 'Cookbook', desc: '+5% awesome cooks • requires shelves',
     icon: 'Icons/chalk4_chalk.png', baseCost: 6000,
     oneTime: true, awesomeBoost: 0.05,
+    requires: ['shelves'],
   },
   {
     id: 'blueberry', name: 'Blueberry Picker', desc: '+3 / sec • blueberries',
@@ -215,15 +226,22 @@ export const UPGRADES = [
     layout: { container: 'fridge', x: 13, y: 35, stepX: 6.0, stepY: -2.5, perRow: 6, max: 12, size: 42 },
   },
   {
-    id: 'sharpknives', name: 'Sharp Knives', desc: '−5% bad • +3% awesome',
-    icon: 'Icons/error_chalk.png', baseCost: 18000,
-    oneTime: true, badReduce: 0.05, awesomeBoost: 0.03,
+    id: 'cheesestand', name: 'Cheese Stand', desc: 'Display stand • requires furniture',
+    icon: 'Environment/Shelf/cheese_stand.png', baseCost: 15000,
+    oneTime: true, requires: ['furniture'],
   },
   {
-    id: 'cheese', name: 'Cheese Stand', desc: '+10 / sec • cheese',
+    id: 'sharpknives', name: 'Sharp Knives', desc: '−5% bad • +3% awesome • requires shelves',
+    icon: 'Icons/error_chalk.png', baseCost: 18000,
+    oneTime: true, badReduce: 0.05, awesomeBoost: 0.03,
+    requires: ['shelves'],
+  },
+  {
+    id: 'cheese', name: 'Cheese', desc: '+10 / sec • requires cheese stand',
     icon: 'Icons/cheese_chalk.png', baseCost: 25000, type: 'auto', power: 10,
     unlocks: ['cheese'],
     sprite: 'Environment/Shelf/cheese.png',
+    requires: ['cheesestand'],
     // Top main shelf of the fridge — % of fridge box
     layout: { container: 'fridge', x: 11, y: 17, stepX: 11, stepY: -2, perRow: 4, max: 12, size: 56 },
   },
@@ -253,7 +271,7 @@ export const UPGRADES = [
     id: 'bread', name: 'Bread Loaf', desc: '+100 / sec',
     icon: 'Icons/bread_chalk.png', baseCost: 600000, type: 'auto', power: 100,
     sprite: 'Environment/Shelf/bread.png',
-    layout: { anchor: 'bottom', x: 53, y: 38, stepX: 2.2, stepY: 1.3, perRow: 4, max: 16, size: 55 },
+    layout: { anchor: 'bottom', x: 65, y: 13, stepX: 2.2, stepY: 1.3, perRow: 5, max: 5, size: 70 },
   },
   {
     id: 'butter', name: 'Butter Block', desc: '+10 per click • butter',

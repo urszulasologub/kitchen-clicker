@@ -54,8 +54,9 @@ export const ACHIEVEMENTS = [
 
   { id: 'banana-pile',   name: 'Banana Mountain', desc: 'Own 25 bananas.',
     check: s => (s.bought.banana || 0) >= 25 },
-  { id: 'all-tools',     name: 'Fully Equipped',  desc: 'Own all 6 one-time tools.',
-    check: s => ['basket','blender','oven','knife','spice','hat']
+  { id: 'all-tools',     name: 'Fully Equipped',  desc: 'Own every one-time tool.',
+    check: s => ['basket','blender','oven','knife','spice','hat',
+                 'kettle','shelves','furniture','cheesestand']
                   .every(id => s.bought[id]) },
   { id: 'all-skills',    name: 'Culinary Genius',  desc: 'Own all 5 skill upgrades.',
     check: s => ['towel','cookbook','sharpknives','plating','michelin']
