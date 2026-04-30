@@ -7,7 +7,8 @@ import { fmt, spritePath } from './util.js';
 import { animateBasketOpen } from './basket.js';
 import { animateKettleAppear } from './kettle.js';
 import {
-  animateShelvesAppear, animateFurnitureAppear, animateCheeseStandAppear,
+  animateStoveAppear, animateShelvesAppear, animateFurnitureAppear,
+  animateCheeseStandAppear, animateOvenAppear,
 } from './decor.js';
 
 // ---------- Special-case purchase callbacks ----------
@@ -15,9 +16,11 @@ import {
 const ON_BUY = {
   basket:      animateBasketOpen,
   kettle:      animateKettleAppear,
+  stove:       animateStoveAppear,
   shelves:     animateShelvesAppear,
   furniture:   animateFurnitureAppear,
   cheesestand: animateCheeseStandAppear,
+  oven:        animateOvenAppear,
 };
 
 // ---------- Prerequisites ----------

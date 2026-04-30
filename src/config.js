@@ -3,7 +3,7 @@
 
 // ---------- Tunable constants ----------
 export const COST_SCALING = 1.22;         // each repurchase multiplies cost by this
-export const STARTER_UNLOCKS = ['pan', 'egg']; // tags unlocked at game start
+export const STARTER_UNLOCKS = ['egg']; // tags unlocked at game start
 
 // Cooking quality — rolled at dish completion.
 //   BAD     → 0 coins, big red banner, screen shake
@@ -51,14 +51,14 @@ export const FANCY_LABELS = [
 export const DISHES = [
   // 1 real ingredient (+ tool) — pocket change
   { name: 'Boiled_Egg',        value: 5,     requires: ['egg'] },
-  { name: 'Sunny_Side_Up_Egg', value: 5,     requires: ['egg', 'pan'] },
+  { name: 'Sunny_Side_Up_Egg', value: 5,     requires: ['egg', 'stove'] },
   { name: 'Hot_Milk',          value: 10,    requires: ['milk'] },
-  { name: 'Burned_Toast',      value: 5,     requires: ['bread', 'pan'] },
-  { name: 'Crispy_Toast',      value: 5,     requires: ['bread', 'pan'] },
-  { name: 'Flat_Bread',        value: 10,    requires: ['flour', 'pan'] },
-  { name: 'Fried_Banana',      value: 10,    requires: ['banana', 'pan'] },
+  { name: 'Burned_Toast',      value: 5,     requires: ['bread', 'stove'] },
+  { name: 'Crispy_Toast',      value: 5,     requires: ['bread', 'stove'] },
+  { name: 'Flat_Bread',        value: 10,    requires: ['flour', 'stove'] },
+  { name: 'Fried_Banana',      value: 10,    requires: ['banana', 'stove'] },
   { name: 'Salami_Rose',       value: 25,    requires: ['salami'] },
-  { name: 'Ghee',              value: 75,    requires: ['butter', 'pan'] },
+  { name: 'Ghee',              value: 75,    requires: ['butter', 'stove'] },
 
   // 2 real ingredients
   { name: 'Egg_Sandwich',     value: 25,    requires: ['bread', 'egg'] },
@@ -71,29 +71,29 @@ export const DISHES = [
   // 3 real ingredients
   { name: 'Banana_Milk',     value: 60,    requires: ['banana', 'milk', 'blender'] },
   { name: 'Blueberry_Milk',  value: 70,    requires: ['blueberry', 'milk', 'blender'] },
-  { name: 'French_Toast',    value: 60,    requires: ['bread', 'egg', 'milk', 'pan'] },
+  { name: 'French_Toast',    value: 60,    requires: ['bread', 'egg', 'milk', 'stove'] },
   { name: 'Cheese_Salami_Sandwich', value: 110,   requires: ['bread', 'cheese', 'salami'] },
   { name: 'Banana_Porridge',        value: 150,   requires: ['oats', 'milk', 'banana'] },
   { name: 'Blueberry_Porridge',     value: 175,   requires: ['oats', 'milk', 'blueberry'] },
 
   // 4 real ingredients
-  { name: 'Pancakes',           value: 110,   requires: ['flour', 'egg', 'milk', 'pan'] },
+  { name: 'Pancakes',           value: 110,   requires: ['flour', 'egg', 'milk', 'stove'] },
   { name: 'Egg_Cheese_Sandwich',  value: 250,   requires: ['bread', 'egg', 'cheese'] },
   { name: 'Egg_Salami_Sandwich',  value: 300,   requires: ['bread', 'egg', 'salami'] },
-  { name: 'Banana_Pancakes',      value: 250,   requires: ['flour', 'egg', 'milk', 'banana', 'pan'] },
-  { name: 'Blueberry_Pancakes',   value: 275,   requires: ['flour', 'egg', 'milk', 'blueberry', 'pan'] },
-  { name: 'Banana_French_Toast',    value: 300,   requires: ['bread', 'egg', 'milk', 'banana', 'pan'] },
-  { name: 'Blueberry_French_Toast', value: 350,   requires: ['bread', 'egg', 'milk', 'blueberry', 'pan'] },
+  { name: 'Banana_Pancakes',      value: 250,   requires: ['flour', 'egg', 'milk', 'banana', 'stove'] },
+  { name: 'Blueberry_Pancakes',   value: 275,   requires: ['flour', 'egg', 'milk', 'blueberry', 'stove'] },
+  { name: 'Banana_French_Toast',    value: 300,   requires: ['bread', 'egg', 'milk', 'banana', 'stove'] },
+  { name: 'Blueberry_French_Toast', value: 350,   requires: ['bread', 'egg', 'milk', 'blueberry', 'stove'] },
   { name: 'Charcuterie_Board',    value: 400,   requires: ['bread', 'cheese', 'salami'] },
   { name: 'Banana_Bread',         value: 550,   requires: ['flour', 'banana', 'butter', 'oven'] },
-  { name: 'Fondue',               value: 1000,  requires: ['cheese', 'milk', 'butter'] },
+  { name: 'Fondue',               value: 1000,  requires: ['cheese', 'milk', 'butter', 'stove'] },
 
   // 5+ real ingredients
   { name: 'Egg_Cheese_Salami_Sandwich', value: 450,   requires: ['bread', 'egg', 'cheese', 'salami'] },
   { name: 'Blueberry_Banana_Porridge',  value: 550,   requires: ['oats', 'milk', 'banana', 'blueberry'] },
-  { name: 'Healthy_Pancakes',        value: 550,    requires: ['flour', 'egg', 'milk', 'oats', 'pan'] },
+  { name: 'Healthy_Pancakes',        value: 550,    requires: ['flour', 'egg', 'milk', 'oats', 'stove'] },
   { name: 'Smoothie',                value: 650,    requires: ['banana', 'blueberry', 'milk', 'blender'] },
-  { name: 'Healthy_Blueberry_Pancakes', value: 800,  requires: ['flour', 'egg', 'milk', 'oats', 'blueberry', 'pan'] },
+  { name: 'Healthy_Blueberry_Pancakes', value: 800,  requires: ['flour', 'egg', 'milk', 'oats', 'blueberry', 'stove'] },
   { name: 'Baked_Banana',  value: 900,   requires: ['banana', 'butter', 'oven'] },
   { name: 'Mug_Cake',      value: 1000,  requires: ['flour', 'egg', 'butter', 'oven'] },
   { name: 'Granola',       value: 1100,  requires: ['oats', 'butter', 'oven'] },
@@ -153,12 +153,17 @@ export function spoiledFor(dish) {
 // layout:  where instances pile up (anchor: 'top' for shelf, 'bottom' for counter)
 export const UPGRADES = [
   {
-    id: 'banana', name: 'Banana Boost', desc: '+2 per click • bananas',
-    icon: 'Icons/banana_chalk.png', baseCost: 25, type: 'click', power: 2,
-    unlocks: ['banana'],
-    sprite: 'Environment/Shelf/banana.png',
-    // Bottom main shelf of the fridge (left side) — % of fridge box
-    layout: { container: 'fridge', x: 10, y: 53, stepX: 8.2, stepY: -3.4, perRow: 5, max: 15, size: 44 },
+    id: 'egg', name: 'Additional Eggs', desc: '+2 per click • more eggs',
+    icon: 'Icons/egg_chalk.png', baseCost: 25, type: 'click', power: 2,
+    unlocks: ['egg'],
+    sprite: 'Environment/Shelf/egg.png',
+    // Bottom door shelf of the fridge — % of fridge box
+    layout: { container: 'fridge', x: 58, y: 48, stepX: 4.9, stepY: -4.4, perRow: 6, max: 12, size: 40 },
+  },
+  {
+    id: 'stove', name: 'Stove', desc: 'Cooktop • unlocks fried recipes',
+    icon: 'Icons/blue/chalk2_chalk.png', baseCost: 50,
+    oneTime: true, unlocks: ['stove'],
   },
   {
     id: 'basket', name: 'Bread Basket', desc: '+3 per click • unlocks bread',
@@ -166,12 +171,12 @@ export const UPGRADES = [
     oneTime: true, unlocks: ['bread'],
   },
   {
-    id: 'egg', name: 'Egg Helper', desc: '+1 / sec • more eggs',
-    icon: 'Icons/egg_chalk.png', baseCost: 350, type: 'auto', power: 1,
-    unlocks: ['egg'],
-    sprite: 'Environment/Shelf/egg.png',
-    // Bottom door shelf of the fridge — % of fridge box
-    layout: { container: 'fridge', x: 58, y: 48, stepX: 4.9, stepY: -4.4, perRow: 6, max: 12, size: 40 },
+    id: 'banana', name: 'Banana Boost', desc: '+1 / sec • bananas',
+    icon: 'Icons/banana_chalk.png', baseCost: 350, type: 'auto', power: 1,
+    unlocks: ['banana'],
+    sprite: 'Environment/Shelf/banana.png',
+    // Bottom main shelf of the fridge (left side) — % of fridge box
+    layout: { container: 'fridge', x: 10, y: 53, stepX: 8.2, stepY: -3.4, perRow: 5, max: 15, size: 44 },
   },
   {
     id: 'towel', name: 'Hand Towel', desc: '−5% bad cooks',
@@ -271,7 +276,7 @@ export const UPGRADES = [
     id: 'bread', name: 'Bread Loaf', desc: '+100 / sec',
     icon: 'Icons/bread_chalk.png', baseCost: 600000, type: 'auto', power: 100,
     sprite: 'Environment/Shelf/bread.png',
-    layout: { anchor: 'bottom', x: 65, y: 13, stepX: 2.2, stepY: 1.3, perRow: 5, max: 5, size: 70 },
+    layout: { anchor: 'bottom', x: 65, y: 10.5, stepX: 2.2, stepY: 1.3, perRow: 5, max: 5, size: 70 },
   },
   {
     id: 'butter', name: 'Butter Block', desc: '+10 per click • butter',

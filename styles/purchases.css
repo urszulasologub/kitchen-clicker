@@ -4,7 +4,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 2;
+  z-index: 4; /* above counter decor (3) so items like bread sit in front of the basket */
 }
 .purchase {
   position: absolute;
