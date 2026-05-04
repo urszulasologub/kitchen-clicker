@@ -52,6 +52,18 @@ function wirePanels() {
   );
 }
 
+// ---------- Mobile cookbook toggle ----------
+function wireCookbookToggle() {
+  const btn  = document.getElementById('btn-cookbook-toggle');
+  const book = document.getElementById('book');
+  if (!btn || !book) return;
+  btn.addEventListener('click', () => {
+    const open = book.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+  });
+}
+
 // ---------- Main loop ----------
 let lastTime = performance.now();
 let upgradeRefreshAccum = 0;
@@ -107,6 +119,7 @@ function init() {
   wirePotCursor();
   wireResetButton();
   wirePanels();
+  wireCookbookToggle();
   wireKeyboard();
   $pot.addEventListener('click', () => { cook(); save(); });
   startAutoSave();

@@ -10,6 +10,13 @@ html, body {
   font-family: 'Segoe UI', Verdana, sans-serif;
   color: #fff;
   cursor: url('../Sprites/Sprites/Cursor/Finger_Hover_Glove.png') 16 4, auto;
+  /* Mobile: keep clicker UX snappy — kill double-tap zoom, tap highlights,
+     accidental selection, and pull-to-refresh. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
 }
 
 img {
