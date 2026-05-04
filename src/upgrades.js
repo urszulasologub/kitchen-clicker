@@ -33,6 +33,7 @@ function unmetRequire(upg) {
   return null;
 }
 
+// Returns the display name of an upgrade by id (used for "Needs X" labels).
 function nameOf(id) {
   const u = UPGRADES.find(x => x.id === id);
   return u ? u.name : id;
@@ -78,6 +79,11 @@ export function refreshUpgrades() {
     const affordable = state.coins >= cost;
     const refs = upgradeEls[upg.id];
     const blocker = unmetRequire(upg);
+
+    // To HIDE gated upgrades entirely until their requirements are met,
+    // uncomment the next two lines (and `continue;` short-circuits the rest):
+    // if (blocker) { refs.root.style.display = 'none'; continue; }
+    // refs.root.style.display = '';
 
     if (upg.oneTime && owned > 0) {
       refs.cost.textContent = '✓ Owned';

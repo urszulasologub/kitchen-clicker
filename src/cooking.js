@@ -23,6 +23,14 @@ export function unlockedDishes() {
   return DISHES.filter(d => d.requires.every(req => state.unlocked.has(req)));
 }
 
+// Dish payout scales with (cps + 1) so the very first auto-cooker doubles
+// payouts (impactful), and cps=0 still pays the base value (so cooking has
+// meaning before any auto-cookers are owned). Clicks earn clickPower coins
+// directly — see cook().
+function dishValue(dish) {
+  return dish.value * (state.cps + 1);
+}
+
 // Pick a recipe weighted toward LOW values — common cooks are cheap, rare
 // cooks are big-tip moments.
 export function pickDish() {
@@ -63,7 +71,7 @@ export function syncCookingUI() {
     hideProgressUI();
     return;
   }
-  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress, dish.value * state.clickPower);
+  refreshProgressUI(dish, clickCostOf(dish), state.cookingProgress, dishValue(dish));
 }
 
 // ---------- Pot click ----------
@@ -87,6 +95,11 @@ export function cook() {
   const cost = clickCostOf(dish);
   state.cookingProgress += state.clickPower;
 
+  // Each click earns clickPower coins directly. Without this, a brand-new
+  // game (cps=0, so dishValue=0) couldn't earn anything from cooking.
+  state.coins        += state.clickPower;
+  state.totalEarned  += state.clickPower;
+
   // Click feedback (every click)
   retriggerClass($pot, 'click');
   playSplash(SPLASH_TIERS[0]); // tiny
@@ -94,7 +107,7 @@ export function cook() {
   if (state.cookingProgress >= cost) {
     completeDish(dish);
   } else {
-    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+    refreshProgressUI(dish, cost, state.cookingProgress, dishValue(dish));
     // Animate one of the dish's ingredients popping out of the pot
     spawnIngredient(dish, { offsetX: (Math.random() - 0.5) * 80, size: 70 });
   }
@@ -127,7 +140,7 @@ export function cookingTick(dt) {
   if (state.cookingProgress >= cost) {
     completeDish(dish);
   } else {
-    refreshProgressUI(dish, cost, state.cookingProgress, dish.value * state.clickPower);
+    refreshProgressUI(dish, cost, state.cookingProgress, dishValue(dish));
   }
 }
 
@@ -153,10 +166,10 @@ function completeDish(dish) {
     dishPath = `FailedDish/${spoiledFor(dish)}.png`;
   } else if (quality === 'awesome') {
     state.awesomeCooks++;
-    value = dish.value * state.clickPower * AWESOME_MULT;
+    value = dishValue(dish) * AWESOME_MULT;
     dishPath = `Dish/${dish.name}.png`;
   } else {
-    value = dish.value * state.clickPower;
+    value = dishValue(dish);
     dishPath = `Dish/${dish.name}.png`;
   }
 

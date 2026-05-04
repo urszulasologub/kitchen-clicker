@@ -290,6 +290,7 @@ export const UPGRADES = [
     id: 'michelin', name: 'Michelin Touch', desc: '−5% bad • +10% awesome',
     icon: 'Icons/unknwon_chalk.png', baseCost: 3000000,
     oneTime: true, badReduce: 0.05, awesomeBoost: 0.10,
+    requires: ['cheesestand'],
   },
   {
     id: 'oats', name: 'Oats Jar', desc: '+300 / sec • oats',
@@ -297,6 +298,7 @@ export const UPGRADES = [
     unlocks: ['oats'],
     sprite: 'Environment/Shelf/oats_base.png',
     layout: { anchor: 'top', x: 37, y: 13, stepX: 1.8, stepY: 1.2, perRow: 5, max: 25, size: 60 },
+    requires: ['basket'],
   },
   {
     id: 'flour', name: 'Master Flour', desc: '+1000 / sec • flour',
@@ -304,6 +306,7 @@ export const UPGRADES = [
     unlocks: ['flour'],
     sprite: 'Environment/Shelf/flour_base.png',
     layout: { anchor: 'bottom', x: 64, y: 38, stepX: 2.0, stepY: 1.4, perRow: 3, max: 12, size: 65 },
+    requires: ['basket'],
   },
   {
     id: 'hat', name: "Chef's Hat", desc: '+50 per click • +500 / sec',
