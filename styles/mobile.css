@@ -1,0 +1,167 @@
+/* Mobile / small-display overrides.
+   Applied last so it wins over fixed-pixel decor sizes. */
+
+@media (max-width: 768px) {
+  /* Items inside the fridge / cheese stand auto-scale via --item-scale
+     derived from the container's width — no per-breakpoint override needed. */
+
+  /* ---------- Decor sizes (CSS-variable overrides) ----------
+     Sized in vw so things scale smoothly between phone and tablet
+     widths (vs. fixed px which made the fridge 91% of an iPhone SE).
+     Sprite ratios preserved with calc() against fridge width 932/983
+     and oven width 893/927. */
+  :root {
+    /* Sizes use vw caps so fridge + furniture + oven fit side-by-side
+       on the narrowest phones. Sum of widths ≈ 97vw, leaving a small
+       margin. Sprite ratios preserved with calc(): fridge 983/932,
+       oven 927/893. */
+    --fridge-width:     min(190px, 45vw);
+    --fridge-height:    calc(var(--fridge-width) * 1.0547);
+    --fridge-bottom:    28vh;
+    --fridge-left:      1vw;
+
+    --furniture-width:  min(170px, 30vw);
+    --furniture-height: calc(var(--furniture-width) * 0.72);
+    --furniture-bottom: 26vh;
+    --furniture-left:   47vw;
+
+    --oven-width:       min(115px, 22vw);
+    --oven-height:      calc(var(--oven-width) * 1.038);
+    --oven-bottom:      26vh;
+    --oven-right:       2vw;
+
+    --shelves-height:   min(85px, 20vw);
+    --shelves-top:      3vh;
+    --shelves-left:     36vw;
+
+    --cheesestand-width: 56px;
+    --cheesestand-top:   -10%;
+  }
+
+  /* ---------- Counter decor ---------- */
+  .stove        { height: min(140px, 32vw); bottom: 6vh; left: 1vw; }
+  .coffee       { height: min(100px, 24vw); bottom: 8vh; left: 24vw; }
+  .cactus       { height: min(70px,  18vw); bottom: 24vh; right: 2vw; }
+  .basket-decor { width:  min(140px, 32vw); bottom: 7vh; right: 14vw; }
+
+  /* ---------- Pot + cook area ---------- */
+  #cook-area {
+    width: min(280px, 70vw);
+    height: min(330px, 82vw);
+    bottom: 5vh;
+  }
+  .pot-wrap {
+    width: min(210px, 54vw);
+    height: min(255px, 64vw);
+  }
+  .pot-lid { top: 4px; }
+  .glow {
+    width: 460px;
+    height: 460px;
+  }
+  .splash {
+    width: 220px;
+    bottom: 220px;
+  }
+  .dish-pop {
+    width: 160px;
+    bottom: 210px;
+  }
+  .ghost-finger {
+    bottom: 290px;
+    width: 42px;
+  }
+
+  /* ---------- Chalkboard top-left ---------- */
+  #chalkboard {
+    padding: 8px 14px;
+    min-width: 130px;
+    top: 2vh;
+    left: 2vw;
+  }
+  .chalk-row       { font-size: 1.5rem; }
+  .chalk-row.small { font-size: 0.85rem; }
+  #reset-btn       { font-size: 0.65rem; padding: 3px 8px; }
+
+  /* ---------- Recent menu — hidden on mobile (it overlapped chalkboard / pot).
+     Players still see "what was cooked recently" in the Recipe Book panel. */
+  #recent-menu { display: none; }
+
+  /* ---------- Bottom-left UI buttons ---------- */
+  #ui-buttons {
+    bottom: 1.5vh;
+    left: 2vw;
+    gap: 4px;
+  }
+  #ui-buttons button {
+    min-width: 86px;
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    border-width: 2px;
+  }
+
+  /* ---------- Cooking progress widget — pushed below the chalkboard so the
+     coin counter doesn't overlap progress text on small screens. */
+  #cook-progress {
+    min-width: 200px;
+    max-width: calc(100vw - 70px); /* clear the burger button on the right */
+    padding: 6px 10px;
+    gap: 8px;
+    top: 18vh;
+  }
+  .progress-icon { width: 40px; height: 40px; }
+  .progress-name   { font-size: 0.85rem; }
+  .progress-clicks { font-size: 0.7rem; }
+  .progress-value  { font-size: 0.8rem; }
+
+  /* ---------- Cookbook content (tighter padding for narrow screen) ---------- */
+  .book-content { padding: 24px 16px 16px 18px; }
+  .book-title   { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 8px; }
+  .upgrade .name { font-size: 0.9rem; }
+  .upgrade .desc { font-size: 0.7rem; }
+  .upgrade .cost { font-size: 0.8rem; }
+  .upgrade .icon { width: 42px; height: 42px; }
+
+  /* ---------- Modal panels ---------- */
+  .panel { width: 96vw; height: 90vh; }
+  .panel-header { padding: 10px 14px; }
+  .panel-title  { font-size: 1.2rem; letter-spacing: 2px; }
+  .panel-content { padding: 12px; }
+
+  /* ---------- Float / flavor text — smaller so they don't overflow ---------- */
+  .float-coin     { font-size: 1.5rem; }
+  .float-coin.big { font-size: 2.1rem; }
+  .flavor          { font-size: 1.2rem; }
+  .flavor.positive-big { font-size: 2.2rem; letter-spacing: 2px; }
+  .flavor.negative-big { font-size: 2.1rem; letter-spacing: 2px; }
+  .flavor.special-big  { font-size: 2.6rem; letter-spacing: 2px; }
+  #frenzy { font-size: 2.4rem; letter-spacing: 2px; }
+
+  /* ---------- Toast stack — center over the scene since the cookbook may be off-screen ---------- */
+  #toast-stack {
+    right: 60px;       /* clears the burger button */
+    top: 2vh;
+    max-width: calc(100vw - 80px);
+  }
+  .toast { padding: 8px 10px; gap: 8px; }
+  .toast-icon { width: 28px; height: 28px; }
+  .toast-title { font-size: 0.85rem; }
+  .toast-msg   { font-size: 0.7rem; }
+}
+
+/* Even tighter on phones (≤480 px). The vw-based sizes above already
+   adapt smoothly down to phone widths; these are just fine-tunes for the
+   smallest screens. */
+@media (max-width: 480px) {
+  :root {
+    --cheesestand-width: 48px;
+    --furniture-bottom:  28vh;
+    --oven-bottom:       28vh;
+    --fridge-bottom:     30vh;
+  }
+  .splash       { width: 160px; bottom: 180px; }
+  .dish-pop     { width: 110px; bottom: 175px; }
+  .ghost-finger { bottom: 230px; width: 36px; }
+  .glow         { width: 360px; height: 360px; }
+}

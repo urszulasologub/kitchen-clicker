@@ -29,7 +29,7 @@
   background: rgba(40, 25, 18, 0.55);
   border: 3px solid rgba(255, 240, 220, 0.18);
   box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-  font-family: 'Comic Sans MS', 'Chalkduster', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Chalkduster', 'Marker Felt', sans-serif;
   text-shadow: 0 0 8px rgba(180, 220, 255, 0.6), 0 0 2px #fff;
   text-align: center;
   min-width: 200px;
@@ -50,7 +50,7 @@
   border: 1px solid rgba(255, 240, 220, 0.25);
   color: rgba(255, 240, 220, 0.6);
   border-radius: 6px;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   font-size: 0.7rem;
   letter-spacing: 1px;
   cursor: pointer;
@@ -210,7 +210,9 @@
   pointer-events: none;
 }
 /* Overlay container that exactly matches the fridge's box.
-   Items inside use percentages so they scale with the (fixed-pixel) fridge. */
+   Items inside use percentages for position and a JS-set --item-scale
+   for size, so they stay proportional to the fridge no matter how
+   the fridge itself is sized (desktop, tablet, phone). */
 #fridge-items {
   position: absolute;
   left:   var(--fridge-left);
@@ -269,7 +271,7 @@
   text-align: center;
 }
 .recent-title {
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   color: #f0f8ff;
   font-size: 1rem;
   letter-spacing: 3px;

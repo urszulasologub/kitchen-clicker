@@ -21,7 +21,7 @@
   border-radius: 10px;
   padding: 10px 14px;
   color: #fff8e0;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   box-shadow: 0 6px 16px rgba(0,0,0,0.4);
   opacity: 0;
   transform: translateX(60px);

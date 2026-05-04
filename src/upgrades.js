@@ -180,7 +180,10 @@ export function spawnPurchase(upg) {
   const img = document.createElement('img');
   img.className = 'purchase';
   img.src = spritePath(upg.sprite);
-  img.style.height = layout.size + 'px';
+  // Publish the natural size as a CSS var; the .purchase rule multiplies
+  // it by --item-scale so the box (not just the visual) shrinks with the
+  // container — keeps top:Y% positioning truly proportional.
+  img.style.setProperty('--item-size', layout.size + 'px');
   // Higher rows render behind; later items in row render in front.
   img.style.zIndex = String(2 + (12 - row) * 3 + col);
 

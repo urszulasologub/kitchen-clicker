@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="styles/fancy.css" />
   <link rel="stylesheet" href="styles/panels.css" />
   <link rel="stylesheet" href="styles/toast.css" />
+  <link rel="stylesheet" href="styles/mobile.css" />
 </head>
 <body>
   <div id="scene">
@@ -109,12 +110,6 @@
       <div id="recent-list"></div>
     </div>
 
-    <!-- Hamburger toggle (mobile only) — slides the cookbook in/out -->
-    <button id="btn-cookbook-toggle" class="btn-cookbook-toggle"
-            type="button" aria-label="Toggle cookbook" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-
     <!-- Cookbook on the right: upgrade cards -->
     <div id="book">
       <img class="book-bg" src="Sprites/Sprites/Book/Book_Back.png" alt="" />
@@ -163,6 +158,13 @@
       <div id="stats-list" class="panel-content"></div>
     </div>
   </div>
+
+  <!-- Hamburger toggle — slides the cookbook in/out. Lives OUTSIDE #scene so it
+       isn't clipped by overflow:hidden and isn't transformed by fancy-5. -->
+  <button id="btn-cookbook-toggle" class="btn-cookbook-toggle"
+          type="button" aria-label="Toggle cookbook" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 
   <script type="module" src="src/main.js"></script>
 </body>

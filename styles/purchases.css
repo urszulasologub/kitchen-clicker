@@ -6,10 +6,18 @@
   pointer-events: none;
   z-index: 4; /* above counter decor (3) so items like bread sit in front of the basket */
 }
+/* Items size themselves via height = --item-size × --item-scale, so the
+   actual layout box shrinks with the container (not just the visual).
+   This keeps `top:Y%` positioning truly proportional — a 70% top stays at
+   70% of the fridge regardless of viewport. --item-size is set by JS per
+   sprite; --item-scale is set by JS on the container based on its
+   rendered width vs. desktop reference. Defaults: 50px and 1. */
 .purchase {
   position: absolute;
   width: auto;
+  height: calc(var(--item-size, 50px) * var(--item-scale, 1));
   opacity: 0;
+  transform-origin: 50% 0;
   transform: translate(-50%, 12px) scale(0.4);
   transition: opacity 380ms, transform 460ms cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
@@ -22,7 +30,7 @@
   animation: purchaseBounce 320ms ease-out;
 }
 @keyframes purchaseBounce {
-  0%   { transform: translate(-50%, 0) scale(1); }
+  0%   { transform: translate(-50%, 0)     scale(1); }
   40%  { transform: translate(-50%, -10px) scale(1.18); }
-  100% { transform: translate(-50%, 0) scale(1); }
+  100% { transform: translate(-50%, 0)     scale(1); }
 }

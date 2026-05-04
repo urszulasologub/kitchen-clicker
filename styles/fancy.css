@@ -38,10 +38,11 @@
   0%, 100% { transform: translateY(0) rotate(0); }
   50%      { transform: translateY(-8px) rotate(-3deg); }
 }
-/* Purchase wobble keeps translate(-50%) so items stay centered while bobbing */
+/* Purchase wobble keeps translate(-50%) so items stay centered while bobbing.
+   No scale() here — items size themselves via height (see purchases.css). */
 @keyframes purchaseBobble {
-  0%, 100% { transform: translate(-50%, 0)    scale(1) rotate(0deg); }
-  50%      { transform: translate(-50%, -5px) scale(1) rotate(2deg); }
+  0%, 100% { transform: translate(-50%, 0)    rotate(0deg); }
+  50%      { transform: translate(-50%, -5px) rotate(2deg); }
 }
 
 /* ---------- TIER 1 (cps >= 5) ---------- */

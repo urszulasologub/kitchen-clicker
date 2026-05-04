@@ -52,15 +52,49 @@ function wirePanels() {
   );
 }
 
-// ---------- Mobile cookbook toggle ----------
+// ---------- Container item-scale ----------
+// Items piled inside the fridge / cheese stand have hard-coded pixel sizes
+// (set by JS in upgrades.js based on each upgrade's `layout.size`). To make
+// them shrink with the container on smaller viewports, we publish an
+// `--item-scale` custom property on each container, computed from the
+// container's actual rendered width vs. its desktop reference width.
+// CSS can't do this (calc(px / px) isn't allowed), so it lives here.
+const ITEM_SCALE_REFS = [
+  { containerSel: '#fridge-items',       measureSel: '.fridge',           refWidth: 702 },
+  { containerSel: '#cheese-stand-decor', measureSel: '.cheese-stand-img', refWidth: 130 },
+];
+function updateItemScales() {
+  for (const { containerSel, measureSel, refWidth } of ITEM_SCALE_REFS) {
+    const container = document.querySelector(containerSel);
+    const measure   = document.querySelector(measureSel);
+    if (!container || !measure) continue;
+    const w = measure.getBoundingClientRect().width;
+    if (w > 0) container.style.setProperty('--item-scale', (w / refWidth).toFixed(3));
+  }
+}
+
+// ---------- Cookbook toggle ----------
+// Hamburger is shown on every viewport. Default state: open on desktop,
+// closed on mobile. Burger toggles to either explicitly opened/closed.
 function wireCookbookToggle() {
   const btn  = document.getElementById('btn-cookbook-toggle');
   const book = document.getElementById('book');
   if (!btn || !book) return;
+
+  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+  let cookbookOpen = !isMobile();
+
+  function applyState() {
+    book.classList.toggle('book-opened', cookbookOpen);
+    book.classList.toggle('book-closed', !cookbookOpen);
+    btn.classList.toggle('open', cookbookOpen);
+    btn.setAttribute('aria-expanded', String(cookbookOpen));
+  }
+  applyState();
+
   btn.addEventListener('click', () => {
-    const open = book.classList.toggle('open');
-    btn.classList.toggle('open', open);
-    btn.setAttribute('aria-expanded', String(open));
+    cookbookOpen = !cookbookOpen;
+    applyState();
   });
 }
 
@@ -122,6 +156,14 @@ function init() {
   wireCookbookToggle();
   wireKeyboard();
   $pot.addEventListener('click', () => { cook(); save(); });
+  updateItemScales();
+  // ResizeObserver picks up both viewport changes (fridge resizes via vw)
+  // and decor appearing for the first time (cheese stand: hidden → visible).
+  const ro = new ResizeObserver(updateItemScales);
+  for (const { measureSel } of ITEM_SCALE_REFS) {
+    const el = document.querySelector(measureSel);
+    if (el) ro.observe(el);
+  }
   startAutoSave();
 
   if (loaded && state.totalEarned > 0) {

@@ -4,7 +4,7 @@
 .float-coin {
   position: fixed;
   z-index: 50;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   font-weight: bold;
   font-size: 2rem;
   color: #ffe66b;
@@ -40,7 +40,7 @@
   position: fixed;
   left: 50%;
   top: 30%;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   font-weight: bold;
   font-size: 1.8rem;
   letter-spacing: 1.5px;
@@ -201,7 +201,7 @@
   border: 3px solid rgba(255, 240, 220, 0.25);
   border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   color: #fff8e0;
   min-width: 280px;
   transition: opacity 0.2s, transform 0.3s;
@@ -292,7 +292,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   font-weight: bold;
   font-size: 4rem;
   letter-spacing: 4px;
