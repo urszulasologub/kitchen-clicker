@@ -17,6 +17,7 @@ import {
   spawnFloat, spawnFlavor, retriggerClass, flashScreen,
   refreshProgressUI, hideProgressUI,
 } from './effects.js';
+import { playSfx } from './audio.js';
 
 // Recipes whose tag requirements are all unlocked right now.
 export function unlockedDishes() {
@@ -25,8 +26,8 @@ export function unlockedDishes() {
 
 // Dish payout scales with (cps + 1) so the very first auto-cooker doubles
 // payouts (impactful), and cps=0 still pays the base value (so cooking has
-// meaning before any auto-cookers are owned). Clicks earn clickPower coins
-// directly — see cook().
+// meaning before any auto-cookers are owned). Clicks fill the progress bar
+// but don't pay coins directly — payout only on dish completion.
 function dishValue(dish) {
   return dish.value * (state.cps + 1);
 }
@@ -95,14 +96,10 @@ export function cook() {
   const cost = clickCostOf(dish);
   state.cookingProgress += state.clickPower;
 
-  // Each click earns clickPower coins directly. Without this, a brand-new
-  // game (cps=0, so dishValue=0) couldn't earn anything from cooking.
-  state.coins        += state.clickPower;
-  state.totalEarned  += state.clickPower;
-
   // Click feedback (every click)
   retriggerClass($pot, 'click');
   playSplash(SPLASH_TIERS[0]); // tiny
+  playSfx('pop');
 
   if (state.cookingProgress >= cost) {
     completeDish(dish);
@@ -192,6 +189,7 @@ function completeDish(dish) {
     retriggerClass($pot, 'click-big', 600);
     spawnFlavor(rand(NEGATIVE_FLAVORS), 'negative-big');
     flashScreen('red');
+    playSfx('sadness');
 
   } else if (quality === 'awesome') {
     spawnDish(dishPath, { size: dishSize() * 1.4 });
@@ -199,6 +197,7 @@ function completeDish(dish) {
     playSplash(pickSplashFor(value));
     retriggerClass($pot, 'click-big', 600);
     spawnFloat(`+$${fmt(value)}`, fx, fy, 'big');
+    playSfx('joy');
     if (!state.cookedRecipes.has(dish.name)) {
       state.cookedRecipes.add(dish.name);
       spawnFlavor('NEW RECIPE!', 'special-big');
@@ -212,6 +211,7 @@ function completeDish(dish) {
     // REGULAR — calm, no flash, no banner. Just dish + coin + small text.
     spawnDish(dishPath, { size: dishSize() });
     playSplash(pickSplashFor(value));
+    playSfx('crunch');
     spawnFloat(`+$${fmt(value)}`, fx, fy);
     if (!state.cookedRecipes.has(dish.name)) {
       // Discovery still gets the rainbow banner — it's a real moment.

@@ -8,7 +8,8 @@ import { animateBasketOpen } from './basket.js';
 import { animateKettleAppear } from './kettle.js';
 import {
   animateStoveAppear, animateShelvesAppear, animateFurnitureAppear,
-  animateCheeseStandAppear, animateOvenAppear,
+  animateCheeseStandAppear, animateOvenAppear, animateFridgeAppear,
+  animateRenovationAppear,
 } from './decor.js';
 
 // ---------- Special-case purchase callbacks ----------
@@ -21,6 +22,8 @@ const ON_BUY = {
   furniture:   animateFurnitureAppear,
   cheesestand: animateCheeseStandAppear,
   oven:        animateOvenAppear,
+  fridge:      animateFridgeAppear,
+  renovation:  animateRenovationAppear,
 };
 
 // ---------- Prerequisites ----------

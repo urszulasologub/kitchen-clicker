@@ -16,7 +16,14 @@
   object-fit: cover;
 }
 #bg-counter { z-index: 1; }
-#bg-wall    { z-index: 0; }
+#bg-wall    { z-index: 0; transition: opacity 0.4s ease; }
+/* Brief flash during the renovation swap so the wall change is felt. */
+#bg-wall.renovating { animation: wallReveal 0.8s ease-out; }
+@keyframes wallReveal {
+  0%   { filter: brightness(1)   saturate(1); }
+  30%  { filter: brightness(1.6) saturate(1.4); }
+  100% { filter: brightness(1)   saturate(1); }
+}
 
 /* ---------- Chalkboard top-left ---------- */
 #chalkboard {
@@ -210,6 +217,7 @@
   filter: drop-shadow(0 8px 10px rgba(0,0,0,0.35));
   pointer-events: none;
 }
+.fridge.appear { animation: decorDrop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 /* Overlay container that exactly matches the fridge's box.
    Items inside use percentages for position and a JS-set --item-scale
    for size, so they stay proportional to the fridge no matter how

@@ -10,6 +10,7 @@ const RENDERERS = {
   recipes:      renderRecipeBook,
   achievements: renderAchievements,
   stats:        renderStats,
+  recent:       renderRecent,
 };
 
 export function openPanel(id) {
@@ -28,6 +29,33 @@ export function togglePanel(id) {
   const el = document.getElementById('panel-' + id);
   if (el?.classList.contains('open')) closeAllPanels();
   else openPanel(id);
+}
+
+// ---------- Recent ----------
+// Mirrors the top-banner #recent-menu (which is hidden on mobile via CSS).
+// Cloning the banner's <img> children keeps a single source of truth — the
+// pushRecent() call in cooking.js still drives both views.
+
+function renderRecent() {
+  const $list = document.getElementById('recent-panel-list');
+  $list.innerHTML = '';
+  const banner = document.getElementById('recent-list');
+  const items = banner ? Array.from(banner.children) : [];
+  if (items.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'panel-summary';
+    empty.textContent = 'No dishes cooked yet — get to the pot!';
+    $list.appendChild(empty);
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'recent-grid';
+  for (const img of items) {
+    const clone = img.cloneNode(true);
+    clone.classList.remove('recent-pop');
+    grid.appendChild(clone);
+  }
+  $list.appendChild(grid);
 }
 
 // ---------- Achievements ----------

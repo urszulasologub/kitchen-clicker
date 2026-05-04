@@ -14,6 +14,7 @@ import { checkAchievements } from './achievements.js';
 import { togglePanel, closeAllPanels } from './panels.js';
 import { wireKeyboard } from './keyboard.js';
 import { toast } from './toast.js';
+import { initAudio, isMuted, toggleMute, setMusicTrack } from './audio.js';
 
 // ---------- Stats display ----------
 function updateStats() {
@@ -46,10 +47,24 @@ function wirePanels() {
   document.getElementById('btn-recipes')      ?.addEventListener('click', () => togglePanel('recipes'));
   document.getElementById('btn-achievements') ?.addEventListener('click', () => togglePanel('achievements'));
   document.getElementById('btn-stats')        ?.addEventListener('click', () => togglePanel('stats'));
+  document.getElementById('btn-recent')       ?.addEventListener('click', () => togglePanel('recent'));
   document.getElementById('panel-backdrop')   ?.addEventListener('click', closeAllPanels);
   document.querySelectorAll('.panel-close').forEach(btn =>
     btn.addEventListener('click', closeAllPanels)
   );
+}
+
+// ---------- Mute button ----------
+function wireMuteButton() {
+  const btn = document.getElementById('btn-mute');
+  if (!btn) return;
+  const refresh = () => {
+    const m = isMuted();
+    btn.textContent = m ? 'MUSIC: OFF' : 'MUSIC: ON';
+    btn.classList.toggle('muted', m);
+  };
+  refresh();
+  btn.addEventListener('click', () => { toggleMute(); refresh(); });
 }
 
 // ---------- Container item-scale ----------
@@ -154,6 +169,13 @@ function init() {
   wireResetButton();
   wirePanels();
   wireCookbookToggle();
+  // initAudio must run before wireMuteButton — the button label is computed
+  // from the muted flag, which initAudio loads from localStorage.
+  initAudio();
+  // applyFancyTier only swaps tracks when tier *changes*, but on a returning
+  // save the tier already matches — pin the initial track explicitly.
+  setMusicTrack(state.fancy);
+  wireMuteButton();
   wireKeyboard();
   $pot.addEventListener('click', () => { cook(); save(); });
   updateItemScales();

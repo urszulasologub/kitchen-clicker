@@ -5,6 +5,7 @@ import { $scene, $frenzy } from './dom.js';
 import { state } from './state.js';
 import { FANCY_THRESHOLDS, FANCY_LABELS } from './config.js';
 import { spawnLeaf, burstLeaves, retriggerClass } from './effects.js';
+import { setMusicTrack } from './audio.js';
 
 function tierForCps(cps) {
   for (let i = FANCY_THRESHOLDS.length - 1; i > 0; i--) {
@@ -29,6 +30,7 @@ export function applyFancyTier() {
     burstLeaves(20 + t * 8);
   }
   state.fancy = t;
+  setMusicTrack(t);
 }
 
 // ---------- Periodic leaf rain at high tiers ----------

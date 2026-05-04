@@ -119,6 +119,36 @@
   border-bottom: 2px dashed #b89060;
 }
 
+/* Mobile-only buttons (hidden on desktop where the equivalent UI is
+   always-visible — e.g. the top-banner #recent-menu). `block` matches the
+   other UI buttons' default flow inside the flex column so text-align stays
+   centered (inline-flex would re-layout the label as a flex item). */
+.mobile-only { display: none; }
+@media (max-width: 768px) {
+  .mobile-only { display: block; }
+}
+
+/* Muted-music state: dimmed to signal "off". */
+#btn-mute.muted {
+  opacity: 0.55;
+  color: rgba(255, 240, 220, 0.6);
+}
+
+/* ---------- Recent dishes grid (mobile panel) ---------- */
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  padding: 8px 4px;
+}
+.recent-grid img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
 /* ---------- Recipe grid ---------- */
 .recipe-grid {
   display: grid;

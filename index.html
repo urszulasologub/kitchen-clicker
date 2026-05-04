@@ -17,7 +17,9 @@
 </head>
 <body>
   <div id="scene">
-    <img id="bg-wall" src="Sprites/Custom-sprites/Background/wall.png" alt="" />
+    <!-- Default to the cracked wall — switches to wall.png after the
+         player buys the Renovation upgrade. -->
+    <img id="bg-wall" src="Sprites/Custom-sprites/Background/poor-wall.png" alt="" />
     <img id="bg-counter" src="Sprites/Custom-sprites/Background/counter.png" alt="" />
 
     <!-- Day/night cycle: tinted overlay sweeping across real-world hours -->
@@ -69,10 +71,11 @@
     <!-- Screen flash on dish completion -->
     <div id="screen-flash" class="screen-flash"></div>
 
-    <!-- Fridge: back-left of the kitchen, behind the counter -->
-    <img class="fridge" src="Sprites/Custom-sprites/Objects/fridge.png" alt="" />
+    <!-- Fridge: back-left of the kitchen, behind the counter. Hidden until
+         the player buys the Fridge upgrade. -->
+    <img class="fridge hidden" src="Sprites/Custom-sprites/Objects/fridge.png" alt="" />
     <!-- Items piled on the fridge shelves. Same box, % positioning. -->
-    <div id="fridge-items"></div>
+    <div id="fridge-items" class="hidden"></div>
 
     <!-- Wall shelves: hidden until the upgrade is bought -->
     <img id="shelves-decor" class="shelves-decor hidden"
@@ -126,6 +129,10 @@
       <button id="btn-recipes"      type="button" title="Recipe Book (R)">RECIPES</button>
       <button id="btn-achievements" type="button" title="Achievements (A)">AWARDS</button>
       <button id="btn-stats"        type="button" title="Stats (T)">STATS</button>
+      <!-- Mobile-only — the top-banner #recent-menu is hidden on small
+           screens, so this button surfaces the same info in a panel. -->
+      <button id="btn-recent"       type="button" title="Recent dishes" class="mobile-only">RECENT</button>
+      <button id="btn-mute"         type="button" title="Toggle music">MUSIC: ON</button>
     </div>
 
     <!-- Toast notifications stack -->
@@ -156,6 +163,14 @@
         <button class="panel-close" type="button">✕</button>
       </div>
       <div id="stats-list" class="panel-content"></div>
+    </div>
+
+    <div id="panel-recent" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Recent Dishes</span>
+        <button class="panel-close" type="button">✕</button>
+      </div>
+      <div id="recent-panel-list" class="panel-content"></div>
     </div>
   </div>
 
