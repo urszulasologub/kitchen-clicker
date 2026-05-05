@@ -9,7 +9,8 @@ import { animateKettleAppear } from './kettle.js';
 import {
   animateStoveAppear, animateShelvesAppear, animateFurnitureAppear,
   animateCheeseStandAppear, animateOvenAppear, animateFridgeAppear,
-  animateRenovationAppear, animateCounterAppear,
+  animateRenovationAppear, animateWallpaperAppear, animateLuxuryWallsAppear,
+  animateCounterAppear,
 } from './decor.js';
 
 // ---------- Special-case purchase callbacks ----------
@@ -24,6 +25,8 @@ const ON_BUY = {
   oven:        animateOvenAppear,
   fridge:      animateFridgeAppear,
   renovation:  animateRenovationAppear,
+  wallpaper:   animateWallpaperAppear,
+  luxurywalls: animateLuxuryWallsAppear,
   counter:     animateCounterAppear,
 };
 

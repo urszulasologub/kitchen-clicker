@@ -77,13 +77,16 @@
 }
 
 /* ---------- Counter zone ----------
-   Logical container for everything that sits ON the counter (stove,
-   coffee, basket, spawned bread loaves). Sized to the visible counter
-   strip at the bottom of the scene; items inside use percentages so they
-   scale lock-step with the counter on smaller viewports — same pattern
-   as the fridge / cheese stand. */
+   Logical container for everything that sits ON the counter. Anchored at
+   scene bottom so children's `bottom: Xvh` resolves the same way it did
+   when items were free children of the scene. Heights inside are sized
+   as % of --counter-height so they scale lock-step with the counter on
+   smaller viewports, same pattern as the fridge / cheese stand. */
 :root {
   --counter-height: clamp(180px, 30vw, 540px);
+  /* Basket width as a fraction of --counter-height. Override per breakpoint
+     to bump the basket up/down on mobile without retyping the calc. */
+  --basket-scale: 0.65;
 }
 #counter-items {
   position: absolute;
@@ -99,19 +102,19 @@
 .counter-decor {
   position: absolute;
   z-index: 3;
-  bottom: 40%;
+  bottom: 12vh;
   height: 45%;
   width: auto;
   filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
 }
-.stove   { left: 4%;   bottom: 33%;  height: 65%; }
+.stove   { left: 4%;   bottom: 10vh; height: 65%; }
 .stove.appear { animation: stoveAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes stoveAppear {
   0%   { transform: translateY(-260px) scale(0.5) rotate(-12deg); opacity: 0; }
   60%  { transform: translateY(14px)   scale(1.12) rotate(4deg);  opacity: 1; }
   100% { transform: translateY(0)      scale(1)    rotate(0);     opacity: 1; }
 }
-.coffee  { left: 30%;  bottom: 40%;  height: 40%; }
+.coffee  { left: 30%;  bottom: 12vh; height: 40%; }
 .coffee.appear { animation: coffeeAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes coffeeAppear {
   0%   { transform: translateY(-260px) scale(0.5) rotate(-12deg); opacity: 0; }
@@ -133,7 +136,9 @@
   --shelves-width:   calc(var(--shelves-height) * 1.463);
 
   --furniture-left:    40vw;
-  --furniture-bottom:  35vh;
+  /* Capped via min() so 35vh can't push the cabinet above the floor on
+     tall viewports — pixel value sets the absolute "floor level". */
+  --furniture-bottom:  min(var(--fridge-bottom), 380px);
   --furniture-height:  280px;
   --furniture-width:   390px;
 
@@ -144,7 +149,7 @@
 
   /* Oven: right side of the room, at the same height level as the furniture */
   --oven-right:   22vw;
-  --oven-bottom:  35vh;
+  --oven-bottom:  var(--fridge-bottom);
   --oven-height:  280px;
   --oven-width:   270px; /* 280 × (893/927) — natural sprite ratio */
 }
@@ -244,7 +249,7 @@
    the browser is resized. */
 :root {
   --fridge-left:   1vw;
-  --fridge-bottom: 35vh;
+  --fridge-bottom: 28vh;
   --fridge-height: 740px;
   --fridge-width:  702px;  /* 740 × (932/983) — natural sprite ratio */
 }
@@ -280,8 +285,8 @@
 .basket-decor {
   position: absolute;
   right: 20%;
-  bottom: 40%;
-  width: calc(var(--counter-height) * 0.65);
+  bottom: 12vh;
+  width: calc(var(--counter-height) * var(--basket-scale));
   z-index: 3;
   filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
   transition: transform 200ms;

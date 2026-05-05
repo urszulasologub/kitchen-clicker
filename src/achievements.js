@@ -6,6 +6,7 @@ import { state } from './state.js';
 import { DISHES } from './config.js';
 import { toast } from './toast.js';
 import { spritePath } from './util.js';
+import { playSfx } from './audio.js';
 
 // Each achievement has:
 //   id:    stable string for save persistence
@@ -89,6 +90,7 @@ export function checkAchievements() {
 
 function unlock(a) {
   state.achievements.add(a.id);
+  playSfx('achievement');
   toast(a.desc, {
     title: a.name,
     kind: 'achievement',

@@ -39,23 +39,35 @@ const POP_FILES = [
 ];
 
 const SADNESS_FILES = [
-  'sound effects/sadness/Human Fart.mp3',
-  'sound effects/sadness/Wine Glass Shatter.mp3',
+  'sound effects/sadness/annoyed-disgust.mp3',
+  'sound effects/sadness/belch.mp3',
+  'sound effects/sadness/boo.mp3',
+  'sound effects/sadness/crowd-disappointed.mp3',
+  'sound effects/sadness/disgust.mp3',
+  'sound effects/sadness/eww.mp3',
+  'sound effects/sadness/fart.mp3',
+  'sound effects/sadness/glass-shatter.mp3',
 ];
 
 const JOY_FILES = [
-  'sound effects/joy/freesound_community-funny-yay-6273.mp3',
-  'sound effects/joy/freesound_community-yay-6120.mp3',
+  'sound effects/joy/crowd-cheer.mp3',
+  'sound effects/joy/cute-wee.mp3',
+  'sound effects/joy/funny-yay.mp3',
+  'sound effects/joy/silly-ya.mp3',
+  'sound effects/joy/yay.mp3',
 ];
+
+const ACHIEVEMENT_FILE = 'sound effects/notification/achievement.mp3';
 
 let bgMusic        = null;
 let currentTrackIx = -1;
 let muted          = false;
 let started        = false;
-let crunchPool     = [];
-let popPool        = [];
-let sadnessPool    = [];
-let joyPool        = [];
+let crunchPool      = [];
+let popPool         = [];
+let sadnessPool     = [];
+let joyPool         = [];
+let achievementSeed = null;
 
 export function initAudio() {
   try { muted = localStorage.getItem(MUTED_KEY) === '1'; } catch (e) {}
@@ -70,10 +82,11 @@ export function initAudio() {
   // cloneNode()'d on play, which lets pops overlap when the player taps
   // the pot rapidly without piling up Audio constructors.
   const seed = src => { const a = new Audio(src); a.preload = 'auto'; return a; };
-  crunchPool  = CRUNCH_FILES.map(seed);
-  popPool     = POP_FILES.map(seed);
-  sadnessPool = SADNESS_FILES.map(seed);
-  joyPool     = JOY_FILES.map(seed);
+  crunchPool      = CRUNCH_FILES.map(seed);
+  popPool         = POP_FILES.map(seed);
+  sadnessPool     = SADNESS_FILES.map(seed);
+  joyPool         = JOY_FILES.map(seed);
+  achievementSeed = seed(ACHIEVEMENT_FILE);
 
   // Browsers block autoplay until the first user gesture.
   const kick = () => {
@@ -117,11 +130,20 @@ function playFromPool(pool, vol = SFX_VOLUME) {
 export function playSfx(name) {
   if (muted) return;
   switch (name) {
-    case 'crunch':  playFromPool(crunchPool); break;
+    case 'crunch':      playFromPool(crunchPool); break;
     // Pops are quick clicks — lower volume so a rapid burst doesn't drown
     // out music or SFX layered on top (like the crunch on dish completion).
-    case 'pop':     playFromPool(popPool, 0.35); break;
-    case 'sadness': playFromPool(sadnessPool, 1.0); break;
-    case 'joy':     playFromPool(joyPool, 1.0); break;
+    case 'pop':         playFromPool(popPool, 0.35); break;
+    case 'sadness':     playFromPool(sadnessPool, 1.0); break;
+    case 'joy':         playFromPool(joyPool, 1.0); break;
+    // Single achievement chime — clone the seed so multiple unlocks in the
+    // same tick still all play (rare, but possible on first load).
+    case 'achievement':
+      if (achievementSeed) {
+        const a = achievementSeed.cloneNode();
+        a.volume = 0.85;
+        a.play().catch(() => {});
+      }
+      break;
   }
 }

@@ -13,8 +13,10 @@ const $fridgeItems = document.getElementById('fridge-items');
 const $bgWall      = document.getElementById('bg-wall');
 const $bgCounter   = document.getElementById('bg-counter');
 
-const POOR_WALL = 'Sprites/Custom-sprites/Background/poor-wall.png';
-const NICE_WALL = 'Sprites/Custom-sprites/Background/wall.png';
+const POOR_WALL    = 'Sprites/Custom-sprites/Background/poor-wall.png';
+const NICE_WALL    = 'Sprites/Custom-sprites/Background/wall.png';
+const FANCY_WALL   = 'Sprites/Custom-sprites/Background/nice-wall.png';
+const LUXURY_WALL  = 'Sprites/Custom-sprites/Background/luxurious-wall.png';
 
 function dropIn(el) {
   if (!el) return;
@@ -47,6 +49,24 @@ export const animateRenovationAppear = () => {
   setTimeout(() => $bgWall.classList.remove('renovating'), 800);
 };
 
+// Designer Wallpaper: tier-2 renovation, swaps the plain finished wall
+// for the patterned one.
+export const animateWallpaperAppear = () => {
+  if (!$bgWall) return;
+  $bgWall.classList.add('renovating');
+  $bgWall.src = FANCY_WALL;
+  setTimeout(() => $bgWall.classList.remove('renovating'), 800);
+};
+
+// Luxury Walls: top-tier renovation, swaps the patterned wallpaper for
+// the luxurious one. Demanding guests come with the territory.
+export const animateLuxuryWallsAppear = () => {
+  if (!$bgWall) return;
+  $bgWall.classList.add('renovating');
+  $bgWall.src = LUXURY_WALL;
+  setTimeout(() => $bgWall.classList.remove('renovating'), 800);
+};
+
 // Counter top reveal — bg-counter is the kitchen counter sprite that
 // appliances sit on. Stays hidden until the player buys Counter. Uses the
 // same dropIn pattern (with a forced reflow) the other decor relies on so
@@ -70,6 +90,10 @@ export function restoreDecorFromState(state) {
   if (state.bought.oven        && $oven)        $oven.classList.remove('hidden');
   if (state.bought.fridge      && $fridge)      $fridge.classList.remove('hidden');
   if (state.bought.fridge      && $fridgeItems) $fridgeItems.classList.remove('hidden');
+  // Wall src follows the highest-tier renovation owned. Order matters —
+  // each subsequent tier overwrites the previous src.
   if (state.bought.renovation  && $bgWall)      $bgWall.src = NICE_WALL;
+  if (state.bought.wallpaper   && $bgWall)      $bgWall.src = FANCY_WALL;
+  if (state.bought.luxurywalls && $bgWall)      $bgWall.src = LUXURY_WALL;
   if (state.bought.counter     && $bgCounter)   $bgCounter.classList.remove('hidden');
 }

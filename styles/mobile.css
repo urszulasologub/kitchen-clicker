@@ -22,25 +22,36 @@
 
     --furniture-width:  min(170px, 30vw);
     --furniture-height: calc(var(--furniture-width) * 0.72);
-    --furniture-bottom: 26vh;
+    --furniture-bottom: var(--fridge-bottom);
     --furniture-left:   47vw;
 
     --oven-width:       min(115px, 22vw);
     --oven-height:      calc(var(--oven-width) * 1.038);
-    --oven-bottom:      26vh;
+    --oven-bottom:      var(--fridge-bottom);
     --oven-right:       2vw;
 
-    --shelves-height:   min(85px, 20vw);
+    --shelves-height:   min(100px, 30vw);
     --shelves-top:      3vh;
-    --shelves-left:     36vw;
+    --shelves-left:     40vw;
 
     --cheesestand-width: 56px;
     --cheesestand-top:   -10%;
+
+    /* Bigger basket on mobile so it reads at a glance — also makes the
+       loaves spawned inside it scale up via --item-scale. */
+    --basket-scale: 0.5;
   }
 
-  /* Counter decor is now positioned/sized as % of #counter-items
-     (scene.css), and --counter-height already shrinks via clamp() —
-     no per-breakpoint override needed. */
+  /* Counter decor: heights are % of --counter-height (scales automatically),
+     but bottoms need per-breakpoint vh overrides — the visible counter top
+     in the sprite ends up at a different vh on tall mobile viewports than
+     on desktop, and these values are tuned to land items right on it.
+     Stove + kettle also shrunk and nudged left so they don't crowd the
+     pot in the middle of small screens. */
+  .stove        { bottom: 16vh; left: 1%;  height: 48%; }
+  .coffee       { bottom: 9vh; left: 12%; height: 30%; }
+  /* Push basket all the way right on mobile so it doesn't crowd the pot. */
+  .basket-decor { bottom: 14vh; right: 2%; }
 
   /* ---------- Pot + cook area ---------- */
   #cook-area {
@@ -154,8 +165,10 @@
 @media (max-width: 480px) {
   :root {
     --cheesestand-width: 48px;
-    --furniture-bottom:  28vh;
-    --oven-bottom:       28vh;
+    /* Don't override --furniture-bottom / --oven-bottom here — the 768px
+       block above ties them to var(--fridge-bottom), and re-setting them
+       to literal vh values severs that link, making them mismatch on
+       small phones. Just bump --fridge-bottom and the others follow. */
     --fridge-bottom:     30vh;
   }
   .splash       { width: 160px; bottom: 180px; }

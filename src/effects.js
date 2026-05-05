@@ -9,10 +9,14 @@ import { SPLASH_TIERS } from './config.js';
 // ---------- Dish-pop ----------
 
 // Dish size grows logarithmically with current earning power so cooking
-// visibly scales with progress. Used by both manual and auto cook.
+// visibly scales with progress. Capped to a fraction of viewport width so
+// the dish-pop doesn't outgrow the screen on phones — the bad/awesome
+// multipliers (×1.25 / ×1.4) in cooking.js push the rendered size higher,
+// so the cap leaves headroom for those.
 export function dishSize() {
   const earnRate = state.cps + state.clickPower;
-  return 80 + Math.min(200, Math.log10(1 + earnRate) * 55);
+  const grown = 80 + Math.min(200, Math.log10(1 + earnRate) * 55);
+  return Math.min(grown, window.innerWidth * 0.35);
 }
 
 export function spawnDish(spritePathRel, opts = {}) {

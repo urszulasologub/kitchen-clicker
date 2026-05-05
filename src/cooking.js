@@ -105,8 +105,10 @@ export function cook() {
     completeDish(dish);
   } else {
     refreshProgressUI(dish, cost, state.cookingProgress, dishValue(dish));
-    // Animate one of the dish's ingredients popping out of the pot
-    spawnIngredient(dish, { offsetX: (Math.random() - 0.5) * 80, size: 70 });
+    // Animate one of the dish's ingredients popping out of the pot.
+    // Size capped to viewport width so the sprite stays sensible on phones.
+    const ingSize = Math.min(70, window.innerWidth * 0.18);
+    spawnIngredient(dish, { offsetX: (Math.random() - 0.5) * 80, size: ingSize });
   }
 }
 

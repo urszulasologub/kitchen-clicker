@@ -214,6 +214,7 @@ export const UPGRADES = [
     id: 'shelves', name: 'Wall Shelves', desc: 'Pantry storage on the wall',
     icon: 'Icons/blue/chalk3_chalk.png', baseCost: 1500,
     oneTime: true,
+    requires: ['renovation'],
   },
   {
     id: 'milk', name: 'Milk Boost', desc: '+3 per click • milk',
@@ -240,6 +241,7 @@ export const UPGRADES = [
     id: 'furniture', name: 'Counter Furniture', desc: 'A cabinet for prep work',
     icon: 'Icons/blue/chalk4_chalk.png', baseCost: 4500,
     oneTime: true,
+    requires: ['counter'],
   },
   {
     id: 'cookbook', name: 'Cookbook', desc: '+5% awesome cooks • requires shelves',
@@ -268,6 +270,12 @@ export const UPGRADES = [
     requires: ['shelves'],
   },
   {
+    id: 'wallpaper', name: 'Designer Wallpaper', desc: '+25 per click • premium kitchen finish',
+    icon: '../Custom-sprites/Background/nice-wall.png', baseCost: 25000,
+    type: 'click', power: 25, oneTime: true,
+    requires: ['renovation'],
+  },
+  {
     id: 'cheese', name: 'Cheese', desc: '+10 / sec • requires cheese stand',
     icon: 'Icons/cheese_chalk.png', baseCost: 25000, type: 'auto', power: 10,
     unlocks: ['cheese'],
@@ -280,11 +288,13 @@ export const UPGRADES = [
     id: 'spice', name: 'Spice Rack', desc: '+30 / sec • +5 per click',
     icon: 'Icons/salt_chalk.png', baseCost: 60000, type: 'auto', power: 30,
     oneTime: true, clickBonus: 5,
+    requires: ['furniture'],
   },
   {
     id: 'oven', name: 'Oven', desc: '+20 / sec • baked recipes',
     icon: 'Icons/mug_chalk.png', baseCost: 100000, type: 'auto', power: 20,
     oneTime: true, unlocks: ['oven'],
+    requires: ['counter'],
   },
   {
     id: 'plating', name: 'Plating Course', desc: '+8% awesome cooks',
@@ -343,9 +353,19 @@ export const UPGRADES = [
     requires: ['shelves'],
   },
   {
-    id: 'hat', name: "Chef's Hat", desc: '+50 per click • +500 / sec',
-    icon: 'Icons/chalk1_chalk.png', baseCost: 30000000, type: 'click', power: 50,
+    id: 'luxurywalls', name: 'Luxury Walls', desc: '+500 per click • +10% bad cooks (demanding guests)',
+    icon: '../Custom-sprites/Background/luxurious-wall.png', baseCost: 20000000,
+    type: 'click', power: 500, oneTime: true,
+    // Negative badReduce → flips the sign in buy() and increases the bad
+    // rate by 10%. Discerning guests are harder to please.
+    badReduce: -0.10,
+    requires: ['wallpaper'],
+  },
+  {
+    id: 'hat', name: "Chef's Hat", desc: '+1000 per click • +500 / sec',
+    icon: 'Icons/chalk1_chalk.png', baseCost: 30000000, type: 'click', power: 1000,
     oneTime: true, autoBonus: 500,
+    requires: ['luxurywalls'],
   },
 ];
 
