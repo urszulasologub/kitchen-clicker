@@ -304,8 +304,10 @@ export const UPGRADES = [
     id: 'bread', name: 'Bread Loaf', desc: '+100 / sec',
     icon: 'Icons/bread_chalk.png', baseCost: 600000, type: 'auto', power: 100,
     sprite: 'Environment/Shelf/bread.png',
-    layout: { anchor: 'bottom', x: 65, y: 10.5, stepX: 2.2, stepY: 1.3, perRow: 5, max: 5, size: 70 },
-    requires: ['counter'],
+    // Spilled out below the basket — % of basket box. y > 100 puts the
+    // loaves just under the basket's bottom edge.
+    layout: { container: 'basket', x: 12, y: 105, stepX: 20, stepY: 22, perRow: 5, max: 5, size: 50 },
+    requires: ['basket'],
   },
   {
     id: 'butter', name: 'Butter Block', desc: '+10 per click • butter',

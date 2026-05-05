@@ -74,18 +74,22 @@ function wireMuteButton() {
 // `--item-scale` custom property on each container, computed from the
 // container's actual rendered width vs. its desktop reference width.
 // CSS can't do this (calc(px / px) isn't allowed), so it lives here.
+// `dim` selects width or height as the scale axis. The counter is always
+// 100vw wide, so its width carries no signal — we measure height instead.
 const ITEM_SCALE_REFS = [
-  { containerSel: '#fridge-items',       measureSel: '.fridge',           refWidth: 702 },
-  { containerSel: '#shelves-items',      measureSel: '#shelves-decor',    refWidth: 439 },
-  { containerSel: '#cheese-stand-decor', measureSel: '.cheese-stand-img', refWidth: 130 },
+  { containerSel: '#fridge-items',       measureSel: '.fridge',           dim: 'width',  refValue: 702 },
+  { containerSel: '#shelves-items',      measureSel: '#shelves-decor',    dim: 'width',  refValue: 439 },
+  { containerSel: '#counter-items',      measureSel: '#counter-items',    dim: 'height', refValue: 540 },
+  { containerSel: '#basket-decor',       measureSel: '#basket-decor',     dim: 'width',  refValue: 351 },
+  { containerSel: '#cheese-stand-decor', measureSel: '.cheese-stand-img', dim: 'width',  refValue: 130 },
 ];
 function updateItemScales() {
-  for (const { containerSel, measureSel, refWidth } of ITEM_SCALE_REFS) {
+  for (const { containerSel, measureSel, dim, refValue } of ITEM_SCALE_REFS) {
     const container = document.querySelector(containerSel);
     const measure   = document.querySelector(measureSel);
     if (!container || !measure) continue;
-    const w = measure.getBoundingClientRect().width;
-    if (w > 0) container.style.setProperty('--item-scale', (w / refWidth).toFixed(3));
+    const v = measure.getBoundingClientRect()[dim];
+    if (v > 0) container.style.setProperty('--item-scale', (v / refValue).toFixed(3));
   }
 }
 

@@ -1,6 +1,6 @@
 // Upgrade card UI + purchases (the items that pile up on shelves and counter).
 
-import { $upgrades, $purchases, $fridgeItems, $shelvesItems, $cheeseStandDecor, $book } from './dom.js';
+import { $upgrades, $purchases, $fridgeItems, $shelvesItems, $counterItems, $cheeseStandDecor, $basketDecor, $book } from './dom.js';
 import { state, save } from './state.js';
 import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config.js';
 import { fmt, spritePath } from './util.js';
@@ -178,6 +178,8 @@ export function spawnPurchase(upg) {
   const PERCENT_CONTAINERS = {
     fridge:      $fridgeItems,
     shelves:     $shelvesItems,
+    counter:     $counterItems,
+    basket:      $basketDecor,
     cheesestand: $cheeseStandDecor,
   };
   const percentTarget = PERCENT_CONTAINERS[layout.container];

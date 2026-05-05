@@ -101,15 +101,18 @@
     <img id="oven-decor" class="oven-decor hidden"
          src="Sprites/Custom-sprites/Objects/oven.png" alt="" />
 
-    <!-- Fixed counter decor -->
-    <img class="counter-decor stove hidden" id="stove-decor" src="Sprites/Sprites/Environment/Counter/stove.png" alt="" />
-    <img class="counter-decor coffee hidden" id="coffee-decor" src="Sprites/Sprites/Environment/Counter/coffemaker.png" alt="" />
-    <img class="counter-decor cactus" src="Sprites/Sprites/Environment/Counter/cactus_plant.png" alt="" />
+    <!-- Counter zone: holds everything sitting on the counter. Children
+         use %-based positioning so they scale with --counter-height. -->
+    <div id="counter-items">
+      <img class="counter-decor stove hidden" id="stove-decor" src="Sprites/Sprites/Environment/Counter/stove.png" alt="" />
+      <img class="counter-decor coffee hidden" id="coffee-decor" src="Sprites/Sprites/Environment/Counter/coffemaker.png" alt="" />
+      <img class="counter-decor cactus" src="Sprites/Sprites/Environment/Counter/cactus_plant.png" alt="" />
 
-    <!-- Bread basket: hidden until Bread Basket upgrade is bought -->
-    <div class="basket-decor hidden" id="basket-decor">
-      <img class="basket-base"  src="Sprites/Sprites/Animations/Basket/basket_base.png" alt="" />
-      <img class="basket-cover" id="basket-cover" src="Sprites/Sprites/Animations/Basket/basket_1.png" alt="" />
+      <!-- Bread basket: hidden until Bread Basket upgrade is bought -->
+      <div class="basket-decor hidden" id="basket-decor">
+        <img class="basket-base"  src="Sprites/Sprites/Animations/Basket/basket_base.png" alt="" />
+        <img class="basket-cover" id="basket-cover" src="Sprites/Sprites/Animations/Basket/basket_1.png" alt="" />
+      </div>
     </div>
 
     <!-- Recently cooked menu -->

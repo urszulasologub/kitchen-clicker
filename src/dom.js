@@ -15,6 +15,7 @@ export const $recent      = document.getElementById('recent-list');
 export const $purchases       = document.getElementById('purchases');
 export const $fridgeItems     = document.getElementById('fridge-items');
 export const $shelvesItems    = document.getElementById('shelves-items');
+export const $counterItems    = document.getElementById('counter-items');
 export const $cheeseStandDecor = document.getElementById('cheese-stand-decor');
 export const $basketDecor = document.getElementById('basket-decor');
 export const $basketCover = document.getElementById('basket-cover');

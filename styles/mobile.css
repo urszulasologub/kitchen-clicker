@@ -38,11 +38,9 @@
     --cheesestand-top:   -10%;
   }
 
-  /* ---------- Counter decor ---------- */
-  .stove        { height: min(140px, 32vw); bottom: 6vh; left: 1vw; }
-  .coffee       { height: min(100px, 24vw); bottom: 8vh; left: 24vw; }
-  .cactus       { height: min(70px,  18vw); bottom: 24vh; right: 2vw; }
-  .basket-decor { width:  min(140px, 32vw); bottom: 7vh; right: 14vw; }
+  /* Counter decor is now positioned/sized as % of #counter-items
+     (scene.css), and --counter-height already shrinks via clamp() —
+     no per-breakpoint override needed. */
 
   /* ---------- Pot + cook area ---------- */
   #cook-area {
