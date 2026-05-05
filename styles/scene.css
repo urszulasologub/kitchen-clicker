@@ -16,6 +16,13 @@
   object-fit: cover;
 }
 #bg-counter { z-index: 1; }
+#bg-counter.counter-reveal {
+  animation: counterFadeUp 0.55s ease-out;
+}
+@keyframes counterFadeUp {
+  0%   { transform: translateY(15%); opacity: 0; }
+  100% { transform: translateY(0);   opacity: 1; }
+}
 #bg-wall    { z-index: 0; transition: opacity 0.4s ease; }
 /* Brief flash during the renovation swap so the wall change is felt. */
 #bg-wall.renovating { animation: wallReveal 0.8s ease-out; }
@@ -102,6 +109,9 @@
   --shelves-left:    40vw;
   --shelves-top:     8vh;
   --shelves-height:  300px;
+  /* Width is derived from the natural sprite ratio (1087/743 = 1.463)
+     so the items overlay covers the same box as the sprite. */
+  --shelves-width:   calc(var(--shelves-height) * 1.463);
 
   --furniture-left:    40vw;
   --furniture-bottom:  35vh;
@@ -126,12 +136,24 @@
   left:   var(--shelves-left);
   top:    var(--shelves-top);
   height: var(--shelves-height);
-  width: auto;
+  width:  var(--shelves-width);
   z-index: 1;
   filter: drop-shadow(0 6px 8px rgba(0,0,0,0.25));
   pointer-events: none;
 }
 .shelves-decor.appear { animation: decorDrop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Items piled on the shelves planks. Same box as .shelves-decor so children
+   use percentages — resize-safe like the fridge. */
+#shelves-items {
+  position: absolute;
+  left:   var(--shelves-left);
+  top:    var(--shelves-top);
+  height: var(--shelves-height);
+  width:  var(--shelves-width);
+  z-index: 2;
+  pointer-events: none;
+}
 
 /* Furniture cabinet with countertop */
 .furniture-decor {

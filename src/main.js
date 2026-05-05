@@ -76,6 +76,7 @@ function wireMuteButton() {
 // CSS can't do this (calc(px / px) isn't allowed), so it lives here.
 const ITEM_SCALE_REFS = [
   { containerSel: '#fridge-items',       measureSel: '.fridge',           refWidth: 702 },
+  { containerSel: '#shelves-items',      measureSel: '#shelves-decor',    refWidth: 439 },
   { containerSel: '#cheese-stand-decor', measureSel: '.cheese-stand-img', refWidth: 130 },
 ];
 function updateItemScales() {

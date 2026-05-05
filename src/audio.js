@@ -121,7 +121,7 @@ export function playSfx(name) {
     // Pops are quick clicks — lower volume so a rapid burst doesn't drown
     // out music or SFX layered on top (like the crunch on dish completion).
     case 'pop':     playFromPool(popPool, 0.35); break;
-    case 'sadness': playFromPool(sadnessPool, 0.6); break;
-    case 'joy':     playFromPool(joyPool, 0.7); break;
+    case 'sadness': playFromPool(sadnessPool, 1.0); break;
+    case 'joy':     playFromPool(joyPool, 1.0); break;
   }
 }

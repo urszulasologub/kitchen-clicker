@@ -1,6 +1,10 @@
 /* Resets, html/body, custom cursor, image rendering */
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* touch-action is non-inherited, so setting it on html/body alone leaves
+   children (the pot, buttons, etc.) defaulting to `auto` — which lets iOS
+   re-enable double-tap zoom on rapid clicks. Universal selector kills it
+   everywhere; `manipulation` still allows pan + pinch, just disables tap-zoom. */
+* { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
 
 html, body {
   width: 100%;

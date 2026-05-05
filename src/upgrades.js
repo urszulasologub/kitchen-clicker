@@ -1,6 +1,6 @@
 // Upgrade card UI + purchases (the items that pile up on shelves and counter).
 
-import { $upgrades, $purchases, $fridgeItems, $cheeseStandDecor, $book } from './dom.js';
+import { $upgrades, $purchases, $fridgeItems, $shelvesItems, $cheeseStandDecor, $book } from './dom.js';
 import { state, save } from './state.js';
 import { UPGRADES, COST_SCALING, MIN_BAD_RATE, MAX_AWESOME_RATE } from './config.js';
 import { fmt, spritePath } from './util.js';
@@ -9,7 +9,7 @@ import { animateKettleAppear } from './kettle.js';
 import {
   animateStoveAppear, animateShelvesAppear, animateFurnitureAppear,
   animateCheeseStandAppear, animateOvenAppear, animateFridgeAppear,
-  animateRenovationAppear,
+  animateRenovationAppear, animateCounterAppear,
 } from './decor.js';
 
 // ---------- Special-case purchase callbacks ----------
@@ -24,6 +24,7 @@ const ON_BUY = {
   oven:        animateOvenAppear,
   fridge:      animateFridgeAppear,
   renovation:  animateRenovationAppear,
+  counter:     animateCounterAppear,
 };
 
 // ---------- Prerequisites ----------
@@ -176,6 +177,7 @@ export function spawnPurchase(upg) {
   // Containers that use percentage-positioning (resize-safe overlay boxes)
   const PERCENT_CONTAINERS = {
     fridge:      $fridgeItems,
+    shelves:     $shelvesItems,
     cheesestand: $cheeseStandDecor,
   };
   const percentTarget = PERCENT_CONTAINERS[layout.container];

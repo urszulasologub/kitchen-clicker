@@ -313,7 +313,7 @@ export const UPGRADES = [
     unlocks: ['butter'],
     sprite: 'Environment/Shelf/butter.png',
     // Bottom main shelf of the fridge (right side, next to bananas) — % of fridge box
-    layout: { container: 'fridge', x: 13.0, y: 19, stepX: 4.1, stepY: -3, perRow: 4, max: 8, size: 38 },
+    layout: { container: 'fridge', x: 13.0, y: 19, stepX: 8, stepY: -3, perRow: 4, max: 8, size: 38 },
     requires: ['fridge'],
   },
   {
@@ -327,16 +327,18 @@ export const UPGRADES = [
     icon: 'Icons/oats_chalk.png', baseCost: 4000000, type: 'auto', power: 300,
     unlocks: ['oats'],
     sprite: 'Environment/Shelf/oats_base.png',
-    layout: { anchor: 'top', x: 37, y: 13, stepX: 1.8, stepY: 1.2, perRow: 5, max: 25, size: 60 },
-    requires: ['basket'],
+    // Top plank of the wall shelves — % of shelves box
+    layout: { container: 'shelves', x: 40, y: 10, stepX: 14, stepY: 32, perRow: 4, max: 4, size: 60 },
+    requires: ['shelves'],
   },
   {
     id: 'flour', name: 'Master Flour', desc: '+1000 / sec • flour',
     icon: 'Icons/flour_chalk.png', baseCost: 12000000, type: 'auto', power: 1000,
     unlocks: ['flour'],
     sprite: 'Environment/Shelf/flour_base.png',
-    layout: { anchor: 'bottom', x: 64, y: 38, stepX: 2.0, stepY: 1.4, perRow: 3, max: 12, size: 65 },
-    requires: ['basket'],
+    // Bottom plank of the wall shelves — % of shelves box
+    layout: { container: 'shelves', x: 18, y: 58, stepX: 16, stepY: 0, perRow: 6, max: 6, size: 65 },
+    requires: ['shelves'],
   },
   {
     id: 'hat', name: "Chef's Hat", desc: '+50 per click • +500 / sec',
