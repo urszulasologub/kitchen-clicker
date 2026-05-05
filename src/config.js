@@ -337,7 +337,7 @@ export const UPGRADES = [
     unlocks: ['flour'],
     sprite: 'Environment/Shelf/flour_base.png',
     // Bottom plank of the wall shelves — % of shelves box
-    layout: { container: 'shelves', x: 18, y: 58, stepX: 16, stepY: 0, perRow: 6, max: 6, size: 65 },
+    layout: { container: 'shelves', x: 18, y: 58, stepX: 16, stepY: 0, perRow: 5, max: 5, size: 65 },
     requires: ['shelves'],
   },
   {
